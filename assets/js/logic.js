@@ -1,3 +1,5 @@
+var chart;
+
 function calcXirr(data, years) {
     function parseDate(dateStr) {
         const parts = dateStr.split('-');
@@ -125,7 +127,7 @@ function createChart(dataToPlot) {
     // console.log(seriesData)
 
     // Create the chart
-    Highcharts.stockChart('container', {
+    chart = Highcharts.stockChart('container', {
         rangeSelector: {
             enabled: false
         },
@@ -134,9 +136,11 @@ function createChart(dataToPlot) {
         },
         series: seriesData
     });
+    chart.hideLoading();
 }
 
 async function main() {
+    showLoading()
     var selectedMutualFundsDiv = document.getElementById("selectedMutualFunds");
     var childDivs = selectedMutualFundsDiv.querySelectorAll("div.row > div");
 
@@ -187,3 +191,9 @@ document.getElementById('radioButton3').addEventListener("click", function () {
 document.getElementById('radioButton4').addEventListener("click", function () {
     main()
 });
+
+function showLoading() {
+    if (chart) {
+        chart.showLoading('Loading data...');
+    }
+}
