@@ -143,6 +143,14 @@ function createChart(dataToPlot) {
             itemMarginTop: 20,
             itemMarginBottom: 0
         },
+        yAxis: {
+            plotLines: [{
+              value: 0,
+              width: 1,
+              color: '#aaa',
+              zIndex: 10
+            }]
+          },
         series: seriesData
     });
     chart.hideLoading();
