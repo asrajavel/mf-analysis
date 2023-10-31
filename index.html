@@ -1,0 +1,101 @@
+<!DOCTYPE HTML>
+<!--
+	Epilogue by TEMPLATED
+	templated.co @templatedco
+	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+-->
+<html>
+
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-29432082-2"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-29432082-2');
+    </script>
+
+    <title>MUTUAL FUND SIP ROLLING RETURNS</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="assets/css/main.css" />
+</head>
+
+<body>
+
+    <!-- Wrapper -->
+    <div id="wrapper">
+
+        <!-- Banner -->
+        <section id="intro" class="main">
+            <!--<span class="icon fa-diamond major"></span>-->
+            <h2>Mutual Fund SIP Rolling Returns</h2>
+            <p>Free and Open source SIP Rolling returns calculator.
+                <br>Data sourced from: <a href="https://mfapi.in">mfapi.in</a>
+            </p>
+            <!-- <label for="mfsearch">Mutual Fund Name:</label> -->
+            <input type="text" id="mfsearch" class="actions" placeholder="Start typing the mutual fund name">
+
+        </section>
+
+        <section id="fundSelection" class="main">
+            <h4>Selected Funds</h4>
+            <div id="selectedMutualFunds"></div>
+        </section>
+        
+        <section id="fundSelection" class="main">
+            <h5>duration</h5>
+            <input type="radio" id="radioButton1" name="radioGroup" value="1" checked>
+            <label for="radioButton1">1 Year</label>
+
+            <input type="radio" id="radioButton2" name="radioGroup" value="3">
+            <label for="radioButton2">3 Years</label>
+
+            <input type="radio" id="radioButton3" name="radioGroup" value="5">
+            <label for="radioButton3">5 Years</label>
+
+            <input type="radio" id="radioButton4" name="radioGroup" value="10">
+            <label for="radioButton4">10 Years</label>
+        </section>
+
+        <section id="fundSelection" class="main">
+            <h5>chart</h5>
+            <div id="container"></div>
+        </section>
+
+        <!-- Footer -->
+        <footer id="footer">
+            <ul class="icons">
+                <li><a href="https://www.linkedin.com/in/rajavelas/" class="icon fa-linkedin"><span
+                            class="label">LinkedIn</span></a></li>
+                            <li><a href="https://www.linkedin.com/in/rajavelas/" class="icon fa-github"><span
+                                class="label">LinkedIn</span></a></li>
+            </ul>
+        </footer>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://code.highcharts.com/stock/highstock.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/stock/modules/accessibility.js"></script>
+
+    <script src="assets/js/libraries/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+    <script src="assets/js/libraries/skel.min.js"></script>
+    <script src="assets/js/libraries/util.js"></script>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/app.js"></script>
+
+    <script src="assets/js/libraries/moment.js"></script>
+    <script src="assets/js/libraries/xirr.js"></script>
+    <script src="assets/js/logic.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+</body>
+
+</html>
