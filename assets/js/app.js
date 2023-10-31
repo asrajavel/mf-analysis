@@ -5,7 +5,10 @@ $(function () {
     searchText = null;
     $("#mfsearch").autocomplete({
         search: function (event, ui) {
-            searchText = encodeURIComponent(document.getElementById("mfsearch").value);
+            var textToSearch;
+            if(document.getElementById("fundType").checked) textToSearch = document.getElementById("mfsearch").value + " growth direct"
+            else textToSearch = document.getElementById("mfsearch").value
+            searchText = encodeURIComponent(textToSearch);
         },
         source: function (req, res) {
             $.ajax({
