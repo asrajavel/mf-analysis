@@ -1,16 +1,7 @@
 var chart;
+var cachedNavData = {};
 
 function calcXirr(data, years) {
-    function parseDate(dateStr) {
-        const parts = dateStr.split('-');
-        return new Date(parts[2], parts[1] - 1, parts[0]);
-    }
-
-    // console.log(data)
-    for (const entry of data) {
-        entry.date = parseDate(entry.date);
-    }
-
     data.sort((a, b) => a.date - b.date);
 
     // console.log(data);
@@ -104,6 +95,17 @@ async function fetchData(url) {
     try {
         const response = await fetch(url);
         const data = await response.json();
+
+        function parseDate(dateStr) {
+            const parts = dateStr.split('-');
+            return new Date(parts[2], parts[1] - 1, parts[0]);
+        }
+    
+        // console.log(data)
+        for (const entry of data.data) {
+            entry.date = parseDate(entry.date);
+        }
+
         return data;
     } catch (error) {
         console.error('Error fetching data:', error);
@@ -150,7 +152,9 @@ async function main() {
         var schemeCode = childDiv.getAttribute("schemecode");
         var schemeName = childDiv.getAttribute("schemename");
 
-        const navData = await fetchData('https://api.mfapi.in/mf/' + schemeCode);
+        if(!cachedNavData[schemeCode] ) cachedNavData[schemeCode] = await fetchData('https://api.mfapi.in/mf/' + schemeCode);
+
+        navData = cachedNavData[schemeCode]
         xirrData = calcXirr(navData.data, years)
 
         // console.log("xirr:")
