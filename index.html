@@ -36,12 +36,19 @@
             <h2>Mutual Fund SIP Rolling Returns</h2>
             <p>Free and Open source SIP Rolling returns calculator.
                 <br>Data sourced from: <a href="https://mfapi.in">mfapi.in</a>
+                <br>Meaning of x return% on say 1-Jan-2023 for 1 yr duration: You invested the same amount on 1st of
+                every month from 1-Jan-2022 until 1-Dec-2022 and today(1-Jan-2023) you are selling all the units to make
+                x% XIRR.
+                In this case you would have done 12 investments, if you select 3 yrs then it would mean 36 investments
+                over the past 3 years.
+
             </p>
             <!-- <label for="mfsearch">Mutual Fund Name:</label> -->
             <input type="text" id="mfsearch" class="actions" placeholder="Start typing the mutual fund name">
             <br>
             <input type="checkbox" id="fundType" name="fundType" value="fundType" checked>
-            <label for="fundType">Show Growth Direct funds only (ignoring other like dividends and regular plans)</label><br>
+            <label for="fundType">Show Growth Direct funds only (ignoring other like dividends and regular
+                plans)</label><br>
         </section>
 
         <section id="fundSelection" class="main">
