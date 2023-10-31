@@ -77,7 +77,7 @@ function calcXirr(data, years) {
         invDates = []
         amounts = []
         units = 0
-        for (j = months - 1; j >= 0; j--) {
+        for (j = months; j >= 1; j--) {
             invDate = getnthPreviousMonthDate(currentDate, j);
             amount = 100;
             // console.log("nav: ", invDate, dateToNavDictionary[invDate])
@@ -91,6 +91,7 @@ function calcXirr(data, years) {
         amounts.push(units * dateToNavDictionary[currentDate])
 
         xirr = XIRR(amounts, invDates) * 100
+        // console.log("currentDate :", currentDate)
         // console.log(invDates);
         // console.log(amounts);
         // console.log("XIRR ----------------------: ", xirr)
