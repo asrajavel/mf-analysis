@@ -137,11 +137,11 @@ function createChart(dataToPlot) {
         },
         legend: {
             enabled: true,
-            layout: 'vertical',
-            align: 'right',
-            verticalAlign: 'top',
-            itemMarginTop: 20,
-            itemMarginBottom: 0
+            // layout: 'horizontal',
+            // align: 'bottom',
+            verticalAlign: 'bottom'
+            // itemMarginTop: 20,
+            // itemMarginBottom: 0
         },
         yAxis: {
             plotLines: [{
