@@ -134,6 +134,14 @@ function createChart(dataToPlot) {
         xAxis: {
             type: 'datetime'
         },
+        legend: {
+            enabled: true,
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'top',
+            itemMarginTop: 20,
+            itemMarginBottom: 0
+        },
         series: seriesData
     });
     chart.hideLoading();
@@ -166,13 +174,13 @@ async function main() {
 }
 
 function getYearsFromRadioButton() {
-    if(document.getElementById('radioButton1').checked) {
+    if (document.getElementById('radioButton1').checked) {
         return 1;
-    } else if(document.getElementById('radioButton2').checked) {
+    } else if (document.getElementById('radioButton2').checked) {
         return 3;
-    } else if(document.getElementById('radioButton3').checked) {
+    } else if (document.getElementById('radioButton3').checked) {
         return 5;
-    } else if(document.getElementById('radioButton4').checked) {
+    } else if (document.getElementById('radioButton4').checked) {
         return 10;
     } else {
         return 1;
