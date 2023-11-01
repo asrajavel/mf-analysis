@@ -1,5 +1,6 @@
 var chart;
 
+//data format: [{date: "31-12-2023", nav: 20.3}]
 function calcXirr(data, years) {
     function parseDate(dateStr) {
         const parts = dateStr.split('-');
