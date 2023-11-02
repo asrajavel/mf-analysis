@@ -40,7 +40,7 @@ function plotInChart(dataToPlot) {
             name: item.schemeName,
             data: item.sipRollingReturnsData,
             tooltip: {
-                valueDecimals: 1
+                valueDecimals: 2
             },
             showInNavigator: true
         };

@@ -6,6 +6,7 @@ var raw_indexData = {
     "Nifty Midcap 150 TRI": {data: index_raw_Nifty_Midcap_150_TRI, dateAttribute: "Date", navAttribute: "TotalReturnsIndex"},
     "Nifty SmallCap 250 TRI": {data: index_raw_Nifty_SmallCap_250_TRI, dateAttribute: "Date", navAttribute: "TotalReturnsIndex"},
     "Nifty 500 TRI": {data: index_raw_Nifty_500_TRI, dateAttribute: "Date", navAttribute: "TotalReturnsIndex"},
+    "Nifty LargeMidcap 250 TRI": {data: index_raw_Nifty_LargeMidcap_250_TRI, dateAttribute: "Date", navAttribute: "TotalReturnsIndex"},
 }
 
 for (const key in raw_indexData) {
