@@ -12,19 +12,6 @@ function calcXirr(schemeName, data, years) {
     cacheKey = JSON.stringify({ schemeName, years });
     if (sipRollingXirrCache[cacheKey]) return sipRollingXirrCache[cacheKey];
 
-    function parseDate(dateStr) {
-        const parts = dateStr.split('-');
-        return new Date(parts[2], parts[1] - 1, parts[0]);
-    }
-
-    // console.log(data)
-    dataWithDateFormattedToJsDate = []
-    for (const entry of data) {
-        var jsDate = parseDate(entry.date);
-        dataWithDateFormattedToJsDate.push({ date: jsDate, nav: entry.nav })
-    }
-    data = dataWithDateFormattedToJsDate
-
     data.sort((a, b) => a.date - b.date);
 
     // console.log(data);
@@ -84,7 +71,7 @@ function calcXirr(schemeName, data, years) {
 
     for (i = fullData.length - 1; i >= 0; i--) {
         currentDate = fullData[i].date
-        firstDateForSip = getnthPreviousMonthDate(currentDate, months - 1);
+        firstDateForSip = getnthPreviousMonthDate(currentDate, months);
         // console.log("firstDateForSip: ", firstDateForSip)
         if (firstDateForSip < navStartingDate) break;
 
@@ -94,17 +81,24 @@ function calcXirr(schemeName, data, years) {
         for (j = months; j >= 1; j--) {
             invDate = getnthPreviousMonthDate(currentDate, j);
             amount = 100;
-            // console.log("nav: ", invDate, dateToNavDictionary[invDate])
             units = units + amount / dateToNavDictionary[invDate]
-
-            invDates.push(invDate);
-            amounts.push(amount * -1.0);
         }
 
-        invDates.push(currentDate);
-        amounts.push(units * dateToNavDictionary[currentDate])
+        sellingPrice = units * dateToNavDictionary[currentDate]
 
-        xirr = XIRR(amounts, invDates) * 100
+        // if(analysis[years][Math.round(units * dateToNavDictionary[currentDate])]) {
+        //     console.log("repeat for: ", years, Math.round(units * dateToNavDictionary[currentDate]))
+        //     analysis[years][Math.round(units * dateToNavDictionary[currentDate])] = analysis[years][Math.round(units * dateToNavDictionary[currentDate])] + 1
+        // } else {
+        //     analysis[years][Math.round(units * dateToNavDictionary[currentDate])] = 0
+        // }
+
+        xirr = sipRollingReturnXirrCache[years][Math.round(sellingPrice)]
+
+        if(xirr === undefined) console.log("missing: ", years, sellingPrice, units, currentDate, dateToNavDictionary[currentDate], firstDateForSip)
+
+        // xirr = XIRR(amounts, invDates) * 100
+
         // console.log("currentDate :", currentDate)
         // console.log(invDates);
         // console.log(amounts);
@@ -114,4 +108,11 @@ function calcXirr(schemeName, data, years) {
     }
     sipRollingXirrCache[cacheKey] = finalGraph;
     return finalGraph;
+}
+
+analysis = {
+    1: {},
+    3: {},
+    5: {},
+    10: {}
 }
