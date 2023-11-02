@@ -40,11 +40,26 @@
                 over the past 3 years.
 
             </p>
-            <input type="text" id="mfsearch" class="actions" placeholder="Start typing the mutual fund name">
-            <br>
-            <input type="checkbox" id="fundType" name="fundType" value="fundType" checked>
-            <label for="fundType">Show Growth Direct funds only (ignoring other like dividends and regular
-                plans)</label><br>
+
+            <input type="radio" id="typeOfFundRadioButton1" name="typeOfFundradioGroup" value="Mutual Fund" checked>
+            <label for="typeOfFundRadioButton1">Mutual Fund</label>
+
+            <input type="radio" id="typeOfFundRadioButton2" name="typeOfFundradioGroup" value="Index">
+            <label for="typeOfFundRadioButton2">Index</label>
+
+            <div id="mfSelector">
+                <input type="text" id="mfsearch" class="actions" placeholder="Start typing the mutual fund name">
+                <br>
+                <input type="checkbox" id="fundType" name="fundType" value="fundType" checked>
+                <label for="fundType">Show Growth Direct funds only (ignoring other like dividends and regular
+                    plans)</label><br>
+            </div>
+
+            <div id="indexSelector" style="display: none;">
+                <select name="indexRadio" id="indexRadio">
+                    <option disabled selected value>Select an Index</option>
+                </select>
+            </div>
         </section>
 
         <section id="fundSelection" class="main">
@@ -102,7 +117,19 @@
     <script src="assets/js/logic.js"></script>
     <script src="assets/js/fetchFromMFApi.js"></script>
     <script src="assets/js/sipRollingXirr.js"></script>
+    <script src="assets/js/xirrCache.js"></script>
+    <script src="assets/js/sipXirrCache.js"></script>
     <script src="assets/js/chartPlotter.js"></script>
+
+    <script src="assets/index/Nifty_50_TRI.js"></script>
+    <script src="assets/index/Nifty_Next_50_TRI.js"></script>
+    <script src="assets/index/Nifty_Midcap_150_TRI.js"></script>
+    <script src="assets/index/Nifty_SmallCap_250_TRI.js"></script>
+    <script src="assets/index/Nifty_500_TRI.js"></script>
+    <script src="assets/js/indexData.js"></script>
+
+    <script src="assets/js/mfVsIndexSelector.js"></script>
+    <script src="assets/js/indexSelector.js"></script>
 
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">

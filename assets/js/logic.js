@@ -11,11 +11,15 @@ async function main() {
         const schemeName = childDiv.getAttribute("schemename");
 
         try {
-            const navData = await fetchData(schemeCode);
+            if(schemeCode === "index") {
+                navData = await indexData[schemeName];
+            } else {
+                navData = await fetchData(schemeCode);
+            }
 
-            precomputeForAlldurations(schemeName, navData.data);
+            precomputeForAlldurations(schemeName, navData);
 
-            const xirrData = calcXirr(schemeName, navData.data, years);
+            const xirrData = calcXirr(schemeName, navData, years);
 
             dataToPlot.push({
                 schemeName: schemeName,
@@ -26,7 +30,7 @@ async function main() {
         }
     }
 
-    createChart(dataToPlot);
+    plotInChart(dataToPlot);
 }
 
 function getYearsFromRadioButton() {

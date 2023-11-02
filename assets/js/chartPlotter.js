@@ -1,52 +1,55 @@
-var chart;
+var chart = Highcharts.stockChart('container', {
+    rangeSelector: {
+        enabled: false
+    },
+    plotOptions: {
+        series: {
+            animation: false
+        }
+    },
+    xAxis: {
+        type: 'datetime'
+    },
+    legend: {
+        enabled: true,
+        // layout: 'horizontal',
+        // align: 'bottom',
+        verticalAlign: 'bottom'
+        // itemMarginTop: 20,
+        // itemMarginBottom: 0
+    },
+    yAxis: {
+        plotLines: [{
+            value: 0,
+            width: 1,
+            color: '#aaa',
+            zIndex: 10
+        }]
+    },
+    series: []
+});
 
-createChart([])
+function plotInChart(dataToPlot) {
+    while (chart.series.length > 0) {
+        chart.series[0].remove();
+    }
 
-function createChart(dataToPlot) {
     var seriesData = dataToPlot.map(function (item) {
         item.sipRollingReturnsData.sort((a, b) => a[0] - b[0]);
-        return {
+        let series = {
             name: item.schemeName,
             data: item.sipRollingReturnsData,
             tooltip: {
                 valueDecimals: 1
-            }
+            },
+            showInNavigator: true
         };
+        chart.addSeries(series);
+        return series
     });
 
-    // console.log(seriesData)
+    // console.log("plotted: ", seriesData);
 
-    // Create the chart
-    chart = Highcharts.stockChart('container', {
-        rangeSelector: {
-            enabled: false
-        },
-        plotOptions: {
-            series: {
-              animation: false
-            }
-        },
-        xAxis: {
-            type: 'datetime'
-        },
-        legend: {
-            enabled: true,
-            // layout: 'horizontal',
-            // align: 'bottom',
-            verticalAlign: 'bottom'
-            // itemMarginTop: 20,
-            // itemMarginBottom: 0
-        },
-        yAxis: {
-            plotLines: [{
-              value: 0,
-              width: 1,
-              color: '#aaa',
-              zIndex: 10
-            }]
-          },
-        series: seriesData
-    });
     chart.hideLoading();
 }
 
