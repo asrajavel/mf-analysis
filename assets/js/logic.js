@@ -11,51 +11,36 @@ async function main() {
         const schemeName = childDiv.getAttribute("schemename");
 
         try {
-            if(schemeCode === "index") {
+            if (schemeCode === "index") {
                 navData = await indexData[schemeName];
             } else {
                 navData = await fetchData(schemeCode);
             }
 
             precomputeForAlldurations(schemeName, navData);
-
-            const xirrData = calcXirr(schemeName, navData, years);
+            if (sipRollingReturnsButton.checked) {
+                dataSeriesForGraph = getSipRolling(schemeName, navData, years, "Sip Rolling Returns");
+                refLineValue = 0
+                graphType = "percentage"
+            } else if (sipRollingAbsoluteButton.checked) {
+                dataSeriesForGraph = getSipRolling(schemeName, navData, years, "Sip Absolute Value");
+                sipAmount = sipAmountTextBox.value.replace(/,/g, '');
+                dataSeriesForGraph = dataSeriesForGraph.map(item => {
+                    return [item[0], item[1] * (sipAmount / 100)];
+                })
+                refLineValue = sipAmount * 12 * years
+                graphType = "currency"
+            }
 
             dataToPlot.push({
                 schemeName: schemeName,
-                sipRollingReturnsData: xirrData,
+                sipRollingReturnsData: dataSeriesForGraph,
             });
         } catch (error) {
             console.error('Error:', error);
         }
     }
 
-    plotInChart(dataToPlot);
+    plotInChart(dataToPlot, graphType, refLineValue);
 }
 
-function getYearsFromRadioButton() {
-    if (document.getElementById('radioButton1').checked) {
-        return 1;
-    } else if (document.getElementById('radioButton2').checked) {
-        return 3;
-    } else if (document.getElementById('radioButton3').checked) {
-        return 5;
-    } else if (document.getElementById('radioButton4').checked) {
-        return 10;
-    } else {
-        return 1;
-    }
-}
-
-document.getElementById('radioButton1').addEventListener("click", function () {
-    main()
-});
-document.getElementById('radioButton2').addEventListener("click", function () {
-    main()
-});
-document.getElementById('radioButton3').addEventListener("click", function () {
-    main()
-});
-document.getElementById('radioButton4').addEventListener("click", function () {
-    main()
-});

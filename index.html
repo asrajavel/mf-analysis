@@ -12,7 +12,11 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-DXWS90J74V"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
         gtag('js', new Date());
 
         gtag('config', 'G-DXWS90J74V');
@@ -20,122 +24,145 @@
 
 
     <title>MUTUAL FUND SIP ROLLING RETURNS</title>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="assets/css/main.css" />
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="assets/css/main.css"/>
 </head>
 
 <body>
 
-    <div id="wrapper">
+<div id="wrapper">
 
-        <section id="intro" class="main">
-            <h2>Mutual Fund SIP Rolling Returns</h2>
-            <p>Free and Open source SIP Rolling returns calculator.
-                <br>Data sourced from: <a href="https://mfapi.in">mfapi.in</a>
-                <br><b>Meaning of x return% on say 3-Jan-2023 for 1 yr duration:</b> You invested the same amount on 3rd of
-                every month from 3-Jan-2022 until 3-Dec-2022 and today(3-Jan-2023) you are selling all the units to make
-                x% XIRR. Similarly 5-Jan-2023 would mean, your investment dates were 5th of every month.
-                <br>In both cases you would have done 12 investments. If you select 3 yrs then it would mean 36 investments
-                over the past 3 years.
+    <section id="intro" class="main">
+        <h2>Mutual Fund SIP Rolling Returns</h2>
+        <p>Free and Open source SIP Rolling returns calculator.
+            <br>Data sourced from: <a href="https://mfapi.in">mfapi.in</a>
+            <br><b>Meaning of x return% on say 3-Jan-2023 for 1 yr duration:</b> You invested the same amount on 3rd of
+            every month from 3-Jan-2022 until 3-Dec-2022 and today(3-Jan-2023) you are selling all the units to make
+            x% XIRR. Similarly 5-Jan-2023 would mean, your investment dates were 5th of every month.
+            <br>In both cases you would have done 12 investments. If you select 3 yrs then it would mean 36 investments
+            over the past 3 years.
+        </p>
 
-            </p>
+        <input type="radio" id="typeOfFundRadioButton1" name="typeOfFundradioGroup" value="Mutual Fund" checked>
+        <label for="typeOfFundRadioButton1">Mutual Fund</label>
 
-            <input type="radio" id="typeOfFundRadioButton1" name="typeOfFundradioGroup" value="Mutual Fund" checked>
-            <label for="typeOfFundRadioButton1">Mutual Fund</label>
+        <input type="radio" id="typeOfFundRadioButton2" name="typeOfFundradioGroup" value="Index">
+        <label for="typeOfFundRadioButton2">Index</label>
 
-            <input type="radio" id="typeOfFundRadioButton2" name="typeOfFundradioGroup" value="Index">
-            <label for="typeOfFundRadioButton2">Index</label>
+        <div id="mfSelector">
+            <input type="text" id="mfsearch" class="actions" placeholder="Start typing the mutual fund name">
+            <br>
+            <input type="checkbox" id="fundType" name="fundType" value="fundType" checked>
+            <label for="fundType">Show Growth Direct funds only (ignoring other like dividends and regular
+                plans)</label><br>
+        </div>
 
-            <div id="mfSelector">
-                <input type="text" id="mfsearch" class="actions" placeholder="Start typing the mutual fund name">
-                <br>
-                <input type="checkbox" id="fundType" name="fundType" value="fundType" checked>
-                <label for="fundType">Show Growth Direct funds only (ignoring other like dividends and regular
-                    plans)</label><br>
-            </div>
+        <div id="indexSelector" style="display: none;">
+            <select name="indexRadio" id="indexRadio">
+                <option disabled selected value>Select an Index</option>
+            </select>
+        </div>
+    </section>
 
-            <div id="indexSelector" style="display: none;">
-                <select name="indexRadio" id="indexRadio">
-                    <option disabled selected value>Select an Index</option>
-                </select>
-            </div>
-        </section>
+    <section id="fundSelection" class="main">
+        <h4>Selected Funds</h4>
+        <div id="selectedMutualFunds"></div>
+    </section>
 
-        <section id="fundSelection" class="main">
-            <h4>Selected Funds</h4>
-            <div id="selectedMutualFunds"></div>
-        </section>
+    <section id="fundSelection" class="main">
+        <h5>Type of chart</h5>
 
-        <section id="fundSelection" class="main">
-            <h5>duration</h5>
-            <input type="radio" id="radioButton1" name="radioGroup" value="1" checked>
-            <label for="radioButton1">1 Year</label>
+        <input type="radio" id="radioButton1TypeOfChart" name="radioGroupTypeOfChart" value="Sip Rolling Returns"
+               checked>
+        <label for="radioButton1TypeOfChart">Sip Rolling Returns (Xirr %)</label>
 
-            <input type="radio" id="radioButton2" name="radioGroup" value="3">
-            <label for="radioButton2">3 Years</label>
+        <input type="radio" id="radioButton2TypeOfChart" name="radioGroupTypeOfChart" value="Sip Absolute Value">
+        <label for="radioButton2TypeOfChart">Sip Rolling Absolute Value (INR)</label>
 
-            <input type="radio" id="radioButton3" name="radioGroup" value="5">
-            <label for="radioButton3">5 Years</label>
+        <br>
+        <div id="sipAmountDiv" style="display: none;">
+        <div style="display: flex; justify-content: center; align-items: center; ">
+            <p style="margin: 0 0 0 0; padding: 1em 1em 1em 1em">Monthly SIP Amount (INR): </p>
+            <input type="text" id="sipAmountTextBox" style="width: 25%;" placeholder="Enter monthly SIP amount" value="10,000">
+        </div>
+        </div>
+    </section>
 
-            <input type="radio" id="radioButton4" name="radioGroup" value="10">
-            <label for="radioButton4">10 Years</label>
-        </section>
+    <section id="fundSelection" class="main">
+        <h5>sip duration</h5>
+        <input type="radio" id="radioButton1" name="radioGroup" value="1" checked>
+        <label for="radioButton1">1 Year</label>
 
-        <section id="fundSelection" class="main">
-            <h5>chart</h5>
-            <div id="container"></div>
-        </section>
+        <input type="radio" id="radioButton2" name="radioGroup" value="3">
+        <label for="radioButton2">3 Years</label>
 
-        <p><b>Known issue:</b> Xirr values less than -40% are not being displayed in the graph (seen as gaps). Will be fixed soon. But should not affect most graphs.</p>
+        <input type="radio" id="radioButton3" name="radioGroup" value="5">
+        <label for="radioButton3">5 Years</label>
 
-        <!-- Footer -->
-        <footer id="footer">
-            <ul class="icons">
-                <li><a href="https://www.linkedin.com/in/rajavelas/" class="icon fa-linkedin"><span
-                            class="label">LinkedIn</span></a></li>
-                <li><a href="https://github.com/asrajavel/mf-analyis" class="icon fa-github"><span
-                            class="label">GitHub</span></a></li>
-            </ul>
-        </footer>
+        <input type="radio" id="radioButton4" name="radioGroup" value="10">
+        <label for="radioButton4">10 Years</label>
+    </section>
 
-    </div>
+    <section id="fundSelection" class="main">
+        <h5>chart</h5>
+        <div id="container"></div>
+    </section>
 
-    <!-- Scripts -->
-    <script src="https://code.highcharts.com/stock/highstock.js"></script>
-    <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/stock/modules/export-data.js"></script>
-    <script src="https://code.highcharts.com/stock/modules/accessibility.js"></script>
+    <p><b>Known issue:</b> Xirr values less than -40% are not being displayed in the graph (seen as gaps). Will be fixed
+        soon. But should not affect most graphs.</p>
 
-    <script src="assets/js/libraries/jquery.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-    <script src="assets/js/libraries/skel.min.js"></script>
-    <script src="assets/js/libraries/util.js"></script>
-    <script src="assets/js/libraries/moment.js"></script>
-    <script src="assets/js/libraries/xirr.js"></script>
+    <!-- Footer -->
+    <footer id="footer">
+        <ul class="icons">
+            <li><a href="https://www.linkedin.com/in/rajavelas/" class="icon fa-linkedin"><span
+                    class="label">LinkedIn</span></a></li>
+            <li><a href="https://github.com/asrajavel/mf-analyis" class="icon fa-github"><span
+                    class="label">GitHub</span></a></li>
+        </ul>
+    </footer>
 
-    <script src="assets/js/main.js"></script>
-    <script src="assets/js/mfSelector.js"></script>
-    <script src="assets/js/logic.js"></script>
-    <script src="assets/js/fetchFromMFApi.js"></script>
-    <script src="assets/js/sipRollingXirr.js"></script>
-    <script src="assets/js/xirrCache.js"></script>
-    <script src="assets/js/sipXirrCache.js"></script>
-    <script src="assets/js/chartPlotter.js"></script>
+</div>
 
-    <script src="assets/index/Nifty_50_TRI.js"></script>
-    <script src="assets/index/Nifty_Next_50_TRI.js"></script>
-    <script src="assets/index/Nifty_Midcap_150_TRI.js"></script>
-    <script src="assets/index/Nifty_SmallCap_250_TRI.js"></script>
-    <script src="assets/index/Nifty_500_TRI.js"></script>
-    <script src="assets/index/Nifty_LargeMidCap_250_TRI.js"></script>
-    <script src="assets/js/indexData.js"></script>
+<!-- Scripts -->
+<script src="https://code.highcharts.com/stock/highstock.js"></script>
+<script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/stock/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/stock/modules/accessibility.js"></script>
 
-    <script src="assets/js/mfVsIndexSelector.js"></script>
-    <script src="assets/js/indexSelector.js"></script>
+<script src="assets/js/libraries/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+<script src="assets/js/libraries/skel.min.js"></script>
+<script src="assets/js/libraries/util.js"></script>
+<script src="assets/js/libraries/moment.js"></script>
+<script src="assets/js/libraries/xirr.js"></script>
 
-    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="assets/js/main.js"></script>
+<script src="assets/js/mfSelector.js"></script>
+<script src="assets/js/logic.js"></script>
+<script src="assets/js/fetchFromMFApi.js"></script>
+<script src="assets/js/sipRollingXirr.js"></script>
+<script src="assets/js/xirrCache.js"></script>
+<script src="assets/js/sipXirrCache.js"></script>
+<script src="assets/js/chartPlotter.js"></script>
+
+<script src="assets/index/Nifty_50_TRI.js"></script>
+<script src="assets/index/Nifty_Next_50_TRI.js"></script>
+<script src="assets/index/Nifty_Midcap_150_TRI.js"></script>
+<script src="assets/index/Nifty_SmallCap_250_TRI.js"></script>
+<script src="assets/index/Nifty_500_TRI.js"></script>
+<script src="assets/index/Nifty_LargeMidCap_250_TRI.js"></script>
+<script src="assets/js/indexData.js"></script>
+
+<script src="assets/js/radioSelectors/mfVsIndexSelector.js"></script>
+<script src="assets/js/radioSelectors/indexSelector.js"></script>
+<script src="assets/js/radioSelectors/typeOfChartSelector.js"></script>
+<script src="assets/js/radioSelectors/durationSelector.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/xirr-calculator@1.0.1/index.min.js"></script>
+
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </body>
 
 </html>
