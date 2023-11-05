@@ -7,10 +7,18 @@ function precomputeForAlldurations(schemeName, navData) {
     calcXirr(schemeName, navData, 10);
 }
 
+function getSipRolling(schemeName, data, years, type) {
+    cacheKey = JSON.stringify({ schemeName, years, type });
+    if (sipRollingXirrCache[cacheKey]) return sipRollingXirrCache[cacheKey];
+}
+
 //data format: [{date: "31-12-2023", nav: 20.3}]
 function calcXirr(schemeName, data, years) {
-    cacheKey = JSON.stringify({ schemeName, years });
-    if (sipRollingXirrCache[cacheKey]) return sipRollingXirrCache[cacheKey];
+    cacheKeyForXirr = JSON.stringify({ schemeName, years, type: "Sip Rolling Returns" });
+    cacheKeyForAbsolute = JSON.stringify({ schemeName, years, type: "Sip Absolute Value" });
+
+    // if already computed once do not compute again
+    if (sipRollingXirrCache[cacheKeyForXirr]) return;
 
     data.sort((a, b) => a.date - b.date);
 
@@ -67,7 +75,8 @@ function calcXirr(schemeName, data, years) {
     months = 12 * years;
     navStartingDate = fullData[0].date;
 
-    finalGraph = []
+    finalGraphXirr = []
+    finalGraphAbsolute = []
 
     for (i = fullData.length - 1; i >= 0; i--) {
         currentDate = fullData[i].date
@@ -95,7 +104,7 @@ function calcXirr(schemeName, data, years) {
 
         xirr = sipRollingReturnXirrCache[years][Math.round(sellingPrice)]
 
-        if(xirr === undefined) console.log("missing: ", years, sellingPrice, units, currentDate, dateToNavDictionary[currentDate], firstDateForSip)
+        // if(xirr === undefined) console.log("missing: ", years, sellingPrice, units, currentDate, dateToNavDictionary[currentDate], firstDateForSip)
 
         // xirr = XIRR(amounts, invDates) * 100
 
@@ -103,11 +112,12 @@ function calcXirr(schemeName, data, years) {
         // console.log(invDates);
         // console.log(amounts);
         // console.log("XIRR ----------------------: ", xirr)
-        finalGraph.push([currentDate.getTime(), xirr])
+        finalGraphXirr.push([currentDate.getTime(), xirr])
+        finalGraphAbsolute.push([currentDate.getTime(), sellingPrice])
 
     }
-    sipRollingXirrCache[cacheKey] = finalGraph;
-    return finalGraph;
+    sipRollingXirrCache[cacheKeyForXirr] = finalGraphXirr;
+    sipRollingXirrCache[cacheKeyForAbsolute] = finalGraphAbsolute;
 }
 
 analysis = {
