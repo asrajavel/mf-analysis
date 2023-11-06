@@ -42,7 +42,7 @@ function XIRR(values, dates, guess) {
   var resultRate = guess;
   
   // Set maximum epsilon for end of iteration
-  var epsMax = 1e-10;
+  var epsMax = 1e-5;
   
   // Set maximum number of iterations
   var iterMax = 50;
@@ -57,9 +57,19 @@ function XIRR(values, dates, guess) {
     epsRate = Math.abs(newRate - resultRate);
     resultRate = newRate;
     contLoop = (epsRate > epsMax) && (Math.abs(resultValue) > epsMax);
+    // console.log("iteration: " + iteration + " rate: " + resultRate + " value: " + resultValue + " eps: " + epsRate, " guess: " + guess);
+    // when the actual xirr is too low, we decrease the guess, when it goes below .9 we decrease by .01
+    // when the actual xirr is too low the calculation goes to infinity or NaN (covered in the next if)
+    if(resultRate > 1000000 && guess >= -0.79) return XIRR(values, dates, guess-0.1);
+    else if (resultRate > 1000000) return XIRR(values, dates, guess-0.01);
   } while(contLoop && (++iteration < iterMax));
 
   if(contLoop) return '#NUM!';
+
+  if(isNaN(resultValue)) {
+    if(guess >= -0.79) return XIRR(values, dates, guess-0.1);
+    else return XIRR(values, dates, guess-0.01);
+  }
 
   // Return internal rate of return
   return resultRate;
