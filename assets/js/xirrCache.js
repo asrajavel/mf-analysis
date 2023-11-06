@@ -2,16 +2,11 @@
 // years to sellingPrice to xirr mapping
 var sipRollingReturnXirrCacheTemp = {}
 
-// This computation will take around 2 mins, browser freeze is expected
-function preComputeSipRollingReturnXirrCache() {
-    var durations = [1, 3, 5, 10];
+var durations = [1, 3, 5, 10];
+var durationsToSampleDates = fillSampleDatesAndTrans()
+
+function fillSampleDatesAndTrans() {
     var durationsToSampleDates = {};
-    var durationsToSellingPriceRanges = {
-        1: {low: 400, high: 3500},
-        3: {low: 2000, high: 10000},
-        5: {low: 3000, high: 22000},
-        10: {low: 10000, high: 72000},
-    }
     var sellingDate = new Date("2023-01-01");
 
     for (var i = 0; i < durations.length; i++) {
@@ -29,31 +24,50 @@ function preComputeSipRollingReturnXirrCache() {
             trans.push(-100);
         }
 
-        durationsToSampleDates[years] = { dates: dates, trans: trans };
+        durationsToSampleDates[years] = {dates: dates, trans: trans};
     }
+    return durationsToSampleDates;
+}
 
-    // console.log(durationsToSampleDates);
+
+function calcXirr(years, sellingPrice) {
+    var months = years * 12;
+    var sampleTrans = durationsToSampleDates[years].trans
+    sampleTrans[months] = sellingPrice;
+    var invDates = durationsToSampleDates[years].dates
+    var xirr = XIRR(sampleTrans, invDates) * 100
+    return Math.round(xirr * 100) / 100;
+}
+
+// This computation will take around 2 mins, browser freeze is expected
+function preComputeSipRollingReturnXirrCache() {
+    console.log("started xirr precompute", new Date());
+
+    var durationsToSellingPriceRanges = {
+        1: {low: 400, high: 3500},
+        3: {low: 2000, high: 10000},
+        5: {low: 3000, high: 22000},
+        10: {low: 10000, high: 72000},
+    }
 
     for (var i = 0; i < durations.length; i++) {
         var years = durations[i];
-        var months = years * 12;
         var sellingPriceToXirr = {}
         lowestSellingPrice = durationsToSellingPriceRanges[years].low;
         highestSellingPrice = durationsToSellingPriceRanges[years].high;
         for(var sellingPrice = lowestSellingPrice; sellingPrice <=highestSellingPrice; sellingPrice+=1) {
-            var sampleTrans = durationsToSampleDates[years].trans
-            sampleTrans[months] = sellingPrice;
-            var invDates = durationsToSampleDates[years].dates
-            var xirr = XIRR(sampleTrans, invDates) * 100
-            sellingPriceToXirr[sellingPrice] = Math.round(xirr * 100) / 100
-            // console.log(years, months, sellingPrice, xirr);
+            const xirr = calcXirr(years, sellingPrice);
+            sellingPriceToXirr[sellingPrice] = xirr
+            // console.log("starting xirr: ", years, sellingPrice, xirr);
         }
         sipRollingReturnXirrCacheTemp[years] = sellingPriceToXirr
     }
+    console.log("finished xirr precompute", new Date());
 }
 
 // uncomment below to get precomputed sip rolling returns xirr values, print the same on console and paste it into sipXirrCache.js
 // preComputeSipRollingReturnXirrCache();
+// console.log(sipRollingReturnXirrCacheTemp);
 
 function getnthPreviousMonthDate(currentDate, months) {
     const date = new Date(currentDate);

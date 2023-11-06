@@ -1,10 +1,10 @@
 sipRollingXirrCache = []
 
 function precomputeForAlldurations(schemeName, navData) {
-    calcXirr(schemeName, navData, 1);
-    calcXirr(schemeName, navData, 3);
-    calcXirr(schemeName, navData, 5);
-    calcXirr(schemeName, navData, 10);
+    preComputeForSingleDuration(schemeName, navData, 1);
+    preComputeForSingleDuration(schemeName, navData, 3);
+    preComputeForSingleDuration(schemeName, navData, 5);
+    preComputeForSingleDuration(schemeName, navData, 10);
 }
 
 function getSipRolling(schemeName, data, years, type) {
@@ -13,7 +13,7 @@ function getSipRolling(schemeName, data, years, type) {
 }
 
 //data format: [{date: "31-12-2023", nav: 20.3}]
-function calcXirr(schemeName, data, years) {
+function preComputeForSingleDuration(schemeName, data, years) {
     cacheKeyForXirr = JSON.stringify({ schemeName, years, type: "Sip Rolling Returns" });
     cacheKeyForAbsolute = JSON.stringify({ schemeName, years, type: "Sip Absolute Value" });
 
@@ -95,16 +95,15 @@ function calcXirr(schemeName, data, years) {
 
         sellingPrice = units * dateToNavDictionary[currentDate]
 
-        // if(analysis[years][Math.round(units * dateToNavDictionary[currentDate])]) {
-        //     console.log("repeat for: ", years, Math.round(units * dateToNavDictionary[currentDate]))
-        //     analysis[years][Math.round(units * dateToNavDictionary[currentDate])] = analysis[years][Math.round(units * dateToNavDictionary[currentDate])] + 1
-        // } else {
-        //     analysis[years][Math.round(units * dateToNavDictionary[currentDate])] = 0
-        // }
+        let roundedSellingPrice = Math.round(sellingPrice);
+        xirr = sipRollingReturnXirrCache[years][roundedSellingPrice]
 
-        xirr = sipRollingReturnXirrCache[years][Math.round(sellingPrice)]
-
-        // if(xirr === undefined) console.log("missing: ", years, sellingPrice, units, currentDate, dateToNavDictionary[currentDate], firstDateForSip)
+        //if the xirr is not found in the cache, calculate it on demand and add it back to the cache
+        if(xirr === undefined) {
+            xirr = calcXirr(years, roundedSellingPrice)
+            sipRollingReturnXirrCache[years][roundedSellingPrice] = xirr
+            console.log("running on demand xirr for extreme value, years: ", years, " price: ", roundedSellingPrice, " date: ", currentDate, "xirr: ", xirr)
+        }
 
         // xirr = XIRR(amounts, invDates) * 100
 
@@ -118,11 +117,4 @@ function calcXirr(schemeName, data, years) {
     }
     sipRollingXirrCache[cacheKeyForXirr] = finalGraphXirr;
     sipRollingXirrCache[cacheKeyForAbsolute] = finalGraphAbsolute;
-}
-
-analysis = {
-    1: {},
-    3: {},
-    5: {},
-    10: {}
 }
