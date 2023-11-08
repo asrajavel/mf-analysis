@@ -1,4 +1,5 @@
-var sipRollingReturnXirrCache =
+// years -> sellingPrice -> xirr
+var sipXirrCache =
     {
         "1": {
             "400": -91.46,

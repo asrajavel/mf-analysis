@@ -30,6 +30,18 @@ async function main() {
                 })
                 refLineValue = sipAmount * 12 * years
                 graphType = "currency"
+            } else if (lumpsumRollingReturnsButton.checked) {
+                dataSeriesForGraph = getSipRolling(schemeName, navData, years, "Lumpsum Rolling Returns");
+                refLineValue = 0
+                graphType = "percentage"
+            } else if(lumpsumRollingAbsoluteButton.checked) {
+                dataSeriesForGraph = getSipRolling(schemeName, navData, years, "Lumpsum Absolute Value");
+                lumpsumAmount = lumpsumAmountTextBox.value.replace(/,/g, '');
+                dataSeriesForGraph = dataSeriesForGraph.map(item => {
+                    return [item[0], item[1] * (lumpsumAmount / 100)];
+                })
+                refLineValue = lumpsumAmount
+                graphType = "currency"
             }
 
             dataToPlot.push({
