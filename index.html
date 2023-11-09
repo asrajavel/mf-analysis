@@ -34,14 +34,9 @@
 <div id="wrapper">
 
     <section id="intro" class="main">
-        <h2>Mutual Fund SIP Rolling Returns</h2>
-        <p>Free and Open source SIP Rolling returns calculator.
-            <br>Data sourced from: <a href="https://mfapi.in">mfapi.in</a>
-            <br><b>Meaning of x return% on say 3-Jan-2023 for 1 yr duration:</b> You invested the same amount on 3rd of
-            every month from 3-Jan-2022 until 3-Dec-2022 and today(3-Jan-2023) you are selling all the units to make
-            x% XIRR. Similarly 5-Jan-2023 would mean, your investment dates were 5th of every month.
-            <br>In both cases you would have done 12 investments. If you select 3 yrs then it would mean 36 investments
-            over the past 3 years.
+        <h2>Mutual Funds Analysis</h2>
+        <p>India's first <b>Free and Open source</b> mutual funds analysis tool.
+
         </p>
 
         <input type="radio" id="typeOfFundRadioButton1" name="typeOfFundradioGroup" value="Mutual Fund" checked>
@@ -62,6 +57,7 @@
             <select name="indexRadio" id="indexRadio">
                 <option disabled selected value>Select an Index</option>
             </select>
+            <br>
         </div>
     </section>
 
@@ -73,6 +69,9 @@
     <section id="fundSelection" class="main">
         <h5>Type of chart</h5>
 
+        <a href="./wiki.html">Click here to understand these charts</a>
+
+        <br><br>
         <input type="radio" id="radioButton1TypeOfChart" name="radioGroupTypeOfChart" value="Sip Rolling Returns"
                checked>
         <label for="radioButton1TypeOfChart">Sip Rolling Returns (XIRR %)</label>
@@ -126,6 +125,8 @@
 
     <!-- Footer -->
     <footer id="footer">
+        <a href="./wiki.html">mf analysis wiki</a>
+        <br><br>
         <ul class="icons">
             <li><a href="https://www.linkedin.com/in/rajavelas/" class="icon fa-linkedin"><span
                     class="label">LinkedIn</span></a></li>

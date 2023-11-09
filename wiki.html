@@ -1,0 +1,127 @@
+<!DOCTYPE HTML>
+<!--
+	Epilogue by TEMPLATED
+	templated.co @templatedco
+	Released for free under the Creative Commons Attribution 3.0 license (templated.co/license)
+-->
+<html>
+
+<head>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-DXWS90J74V"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-DXWS90J74V');
+    </script>
+
+
+    <title>MUTUAL FUND SIP ROLLING RETURNS</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="assets/css/main.css"/>
+</head>
+
+<body>
+
+<div id="wrapper" style="text-align: left">
+
+    <section id="fundSelection" style="margin: 0 0 1em 0">
+        <h2>Mutual Funds Analysis wiki</h2>
+    </section>
+    <section id="fundSelection" style="text-align: left">
+        <h3>Meaning of a point in various graphs that are plotted</h3>
+
+        <br> These descriptions below assume that you have a basic understanding of returns and XIRR beforehand.
+        <br> Investment duration of 3 yrs is taken for all examples.
+        <br> p is the value of the point on 10-Jan-2023.
+        <br> Below is the meaning of p for all graphs.
+        <br>
+        <br> <h4>Sip Rolling Returns (XIRR %):</h4>
+        You invested x amount on each of: 10-Jan-2020, 10-Feb-2020, 20-Mar-2020....until 10-Dec-2022
+        <br> Totally making 12*3 = 36 investments
+        <br> x can be anything, but the same amount x is invested everytime.
+        <br> p is the XIRR return percentage of your investment.
+        <br> So this graph will show you all possible returns(XIRR) this fund generated, if you did a 3 yr SIP.
+        <br> That is the meaning of rolling returns - a graph where all points are return values.
+        <br>
+        <br> <h4>Sip Rolling Absolute Value (₹):</h4>
+        You invested x amount on each of: 10-Jan-2020, 10-Feb-2020, 20-Mar-2020....until 10-Dec-2022
+        <br> x is what you input in the text box as monthly SIP amount.
+        <br> Totally making 12*3 = 36 investments
+        <br> p is the current value(₹) of your investment
+        <br> So this graph will show you all possible absolute returns(₹) this fund generated, if you did a 3 yr SIP
+        anytime.
+        <br> This graph can tell you all possible final investment values this fund had generated in the past, if you do
+        a blind SIP of say ₹10,000 in this fund.
+        <br>
+        <br> <h4>Lumpsum Rolling Returns (CAGR %):</h4>
+        You invested x amount on 10-Jan-2020.
+        <br> x can be anything.
+        <br> p is the yearly return(%) of you investment
+        <br>
+        <br> <h4>Lumpsum Rolling Absolute Value (₹):</h4>
+        You invested x amount on 10-Jan-2020.
+        <br> x is what you input in the text box as the lumpsum amount.
+        <br> p is the current value(₹) of your investment
+    </section>
+    <br>
+    <section id="fundSelection" style="text-align: left">
+        <h3>Where is data sourced from</h3>
+        <br> <h4>Index</h4>
+        Currently there are no sources in India which provides historical index data through API.
+        <br> I manually download from <a href="https://www.niftyindices.com/reports/historical-data">https://www.niftyindices.com/reports/historical-data</a>
+        and upload into the site.
+        <br> So, this data is stored in the site itself, which has to be manually updated for new dates' data to be
+        available.
+        <br> Will try to update this every few months.
+        <br> The data size is 3MB, which is loaded to the page itself.
+        <br> Everytime you open/refresh the site this 3MB is loaded again.
+        <br>
+        <br> <h4>Mutual funds</h4>
+        Every time you choose a fund, live data is fetched from <a href="https://mfapi.in/">mfapi.in</a>
+        <br> This data is always up-to-date.
+    </section>
+    <br>
+    <section id="fundSelection" style="text-align: left">
+        <h3>How are the calculations done</h3>
+        <br> There are no backend servers to this site, nothing leaves your browser.
+        <br> Once you select a mutual fund or index, XIRR is calculated for all the supported investment durations
+        (currently 1, 3, 5, 10 years), for both lumpsum and SIP investments.
+        <br> (Nifty 50 index data is available from 1991, for all durations with Lumpsum and SIP rolling XIRR calcs -> a
+        total of around 80,000 XIRR values need to be calculated)
+        <br> Given the nav data - this takes around 2 mins for one fund/index, as the xirr calculations are time taking.
+        <br> Which is too much to wait for a graph to load, also the browser will freeze as all the calculations will be
+        done on your device.
+        <br> To avoid this, a set of precalculated values for XIRR are stored in the website which avoids xirr calc on
+        your device, hence skipping the 2 mins.
+        <br> The size of the precalculated values is around 3MB, which is loaded to the page itself.
+        <br> Everytime you open/refresh the site this 3MB is loaded again.
+    </section>
+
+    <!-- Footer -->
+    <footer id="footer">
+        <a href="./index.html">homepage</a>
+        <br><br>
+        <ul class="icons">
+            <li><a href="https://www.linkedin.com/in/rajavelas/" class="icon fa-linkedin"><span
+                    class="label">LinkedIn</span></a></li>
+            <li><a href="https://github.com/asrajavel/mf-analyis" class="icon fa-github"><span
+                    class="label">GitHub</span></a></li>
+        </ul>
+    </footer>
+</div>
+
+
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</body>
+
+</html>

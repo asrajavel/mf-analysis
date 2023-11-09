@@ -55,10 +55,6 @@ function getLumpsumDurationsToSampleDates() {
 }
 
 function calcLumpsumXirr(years, sellingPrice) {
-    // console.log(years, sellingPrice)
-    stats(years, sellingPrice);
-
-
     var sampleTrans = lumpsumDurationsToSampleDates[years].trans
     sampleTrans[1] = sellingPrice;
     var invDates = lumpsumDurationsToSampleDates[years].dates

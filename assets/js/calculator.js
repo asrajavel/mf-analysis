@@ -102,7 +102,7 @@ function preComputeForSingleDuration(schemeName, navData, years) {
         let lumpsumSellingPriceUnrounded = totalUnitsPurchasedByLumpSum * dateToNavDictionary[currentDate]
 
         let sipSellingPrice = Math.round(sipSellingPriceUnrounded);
-        let lumpsumSellingPrice = Math.round(lumpsumSellingPriceUnrounded * 10) / 10;
+        let lumpsumSellingPrice = (Math.round(lumpsumSellingPriceUnrounded * 10) / 10).toFixed(1);
         sipXirr = sipXirrCache[years][sipSellingPrice]
         lumpsumXirr = lumpsumXirrCache[years][lumpsumSellingPrice]
 

@@ -1,5 +1,3 @@
-@import url("https://fonts.googleapis.com/css?family=Pacifico|Source+Sans+Pro:200,400");
-
 /*
 	Epilogue by TEMPLATED
 	templated.co @templatedco
@@ -1714,7 +1712,7 @@ body.is-loading #header.alt .inner {
 
 #footer:before {
 	content: '';
-	display: inline-block;
+	/*display: inline-block;*/
 	width: 6em;
 	height: 2px;
 	background-color: #666666;
