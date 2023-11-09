@@ -1,3 +1,9 @@
+Highcharts.setOptions({
+    time: {
+        useUTC: false
+    }
+});
+
 var chart = Highcharts.stockChart('container', {
     rangeSelector: {
         enabled: false
@@ -97,7 +103,7 @@ function getTooltipFormatter(graphType) {
     } else if (graphType === "percentage") {
         return {
             pointFormatter: function () {
-                let formattedValue = this.y.toFixed(1) + " %";
+                let formattedValue = this.y.toFixed(2) + " %";
                 return `<span style="color:${this.color}">\u25CF</span> ${this.series.name}: <b>${formattedValue}</b><br/>`;
             }
         };
@@ -128,7 +134,7 @@ function plotInChart(dataToPlot, graphType, refLineValue) {
         labels: getYaxisLabels(graphType)
     });
 
-    // console.log("plotted: ", seriesData);
+    console.log("plotted: ", seriesData);
 
     chart.hideLoading();
 }

@@ -1,3 +1,1 @@
-# mf-analyis
-Currenlty can plot SIP rolling returns for mutual funds <br>
-Data sourced from mfapi.in
+[wiki](https://asrajavel.github.io/mf-analysis/wiki.html)

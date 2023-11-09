@@ -23,7 +23,7 @@
     </script>
 
 
-    <title>MUTUAL FUND SIP ROLLING RETURNS</title>
+    <title>mf analysis</title>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link rel="stylesheet" href="assets/css/main.css"/>
@@ -34,14 +34,9 @@
 <div id="wrapper">
 
     <section id="intro" class="main">
-        <h2>Mutual Fund SIP Rolling Returns</h2>
-        <p>Free and Open source SIP Rolling returns calculator.
-            <br>Data sourced from: <a href="https://mfapi.in">mfapi.in</a>
-            <br><b>Meaning of x return% on say 3-Jan-2023 for 1 yr duration:</b> You invested the same amount on 3rd of
-            every month from 3-Jan-2022 until 3-Dec-2022 and today(3-Jan-2023) you are selling all the units to make
-            x% XIRR. Similarly 5-Jan-2023 would mean, your investment dates were 5th of every month.
-            <br>In both cases you would have done 12 investments. If you select 3 yrs then it would mean 36 investments
-            over the past 3 years.
+        <h2>Mutual Funds Analysis</h2>
+        <p>India's first <b>Free and Open source</b> mutual funds analysis tool.
+
         </p>
 
         <input type="radio" id="typeOfFundRadioButton1" name="typeOfFundradioGroup" value="Mutual Fund" checked>
@@ -62,6 +57,7 @@
             <select name="indexRadio" id="indexRadio">
                 <option disabled selected value>Select an Index</option>
             </select>
+            <br>
         </div>
     </section>
 
@@ -73,24 +69,42 @@
     <section id="fundSelection" class="main">
         <h5>Type of chart</h5>
 
+        <a href="./wiki.html">Click here to understand these charts</a>
+
+        <br><br>
         <input type="radio" id="radioButton1TypeOfChart" name="radioGroupTypeOfChart" value="Sip Rolling Returns"
                checked>
-        <label for="radioButton1TypeOfChart">Sip Rolling Returns (Xirr %)</label>
+        <label for="radioButton1TypeOfChart">Sip Rolling Returns (XIRR %)</label>
 
         <input type="radio" id="radioButton2TypeOfChart" name="radioGroupTypeOfChart" value="Sip Absolute Value">
         <label for="radioButton2TypeOfChart">Sip Rolling Absolute Value (₹)</label>
 
         <br>
+
+        <input type="radio" id="radioButton3TypeOfChart" name="radioGroupTypeOfChart" value="Lumpsum Rolling Returns">
+        <label for="radioButton3TypeOfChart">Lumpsum Rolling Returns (CAGR %)</label>
+
+        <input type="radio" id="radioButton4TypeOfChart" name="radioGroupTypeOfChart" value="Lumpsum Absolute Value">
+        <label for="radioButton4TypeOfChart">Lumpsum Rolling Absolute Value (₹)</label>
+
+        <br>
         <div id="sipAmountDiv" style="display: none;">
-        <div style="display: flex; justify-content: center; align-items: center; ">
-            <p style="margin: 0 0 0 0; padding: 1em 1em 1em 1em">Monthly SIP Amount (₹): </p>
-            <input type="text" id="sipAmountTextBox" style="width: 25%;" placeholder="Enter monthly SIP amount" value="10,000">
+            <div style="display: flex; justify-content: center; align-items: center; ">
+                <p style="margin: 0 0 0 0; padding: 1em 1em 1em 1em">Monthly SIP Amount (₹): </p>
+                <input type="text" id="sipAmountTextBox" style="width: 25%;" value="10,000">
+            </div>
         </div>
+
+        <div id="lumpsumAmountDiv" style="display: none;">
+            <div style="display: flex; justify-content: center; align-items: center; ">
+                <p style="margin: 0 0 0 0; padding: 1em 1em 1em 1em">Lumpsum investment Amount (₹): </p>
+                <input type="text" id="lumpsumAmountTextBox" style="width: 25%;" value="1,00,000">
+            </div>
         </div>
     </section>
 
     <section id="fundSelection" class="main">
-        <h5>sip duration</h5>
+        <h5>investment duration</h5>
         <input type="radio" id="radioButton1" name="radioGroup" value="1" checked>
         <label for="radioButton1">1 Year</label>
 
@@ -111,6 +125,8 @@
 
     <!-- Footer -->
     <footer id="footer">
+        <a href="./wiki.html">mf analysis wiki</a>
+        <br><br>
         <ul class="icons">
             <li><a href="https://www.linkedin.com/in/rajavelas/" class="icon fa-linkedin"><span
                     class="label">LinkedIn</span></a></li>
@@ -126,6 +142,7 @@
 <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
 <script src="https://code.highcharts.com/stock/modules/export-data.js"></script>
 <script src="https://code.highcharts.com/stock/modules/accessibility.js"></script>
+<script src="https://code.highcharts.com/modules/histogram-bellcurve.js"></script>
 
 <script src="assets/js/libraries/jquery.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
@@ -135,12 +152,12 @@
 <script src="assets/js/libraries/xirr.js"></script>
 
 <script src="assets/js/main.js"></script>
-<script src="assets/js/mfSelector.js"></script>
 <script src="assets/js/logic.js"></script>
 <script src="assets/js/fetchFromMFApi.js"></script>
-<script src="assets/js/sipRollingXirr.js"></script>
-<script src="assets/js/xirrCache.js"></script>
+<script src="assets/js/calculator.js"></script>
+<script src="assets/js/sipXirrCacheCalculator.js"></script>
 <script src="assets/js/sipXirrCache.js"></script>
+<script src="assets/js/lumpsumXirrCache.js"></script>
 <script src="assets/js/chartPlotter.js"></script>
 
 <script src="assets/index/Nifty_50_TRI.js"></script>
@@ -149,12 +166,13 @@
 <script src="assets/index/Nifty_SmallCap_250_TRI.js"></script>
 <script src="assets/index/Nifty_500_TRI.js"></script>
 <script src="assets/index/Nifty_LargeMidCap_250_TRI.js"></script>
-<script src="assets/js/indexData.js"></script>
+<script src="assets/index/indexDataManager.js"></script>
 
-<script src="assets/js/radioSelectors/mfVsIndexSelector.js"></script>
-<script src="assets/js/radioSelectors/indexSelector.js"></script>
-<script src="assets/js/radioSelectors/typeOfChartSelector.js"></script>
-<script src="assets/js/radioSelectors/durationSelector.js"></script>
+<script src="assets/js/selectors/mfSelector.js"></script>
+<script src="assets/js/selectors/mfVsIndexSelector.js"></script>
+<script src="assets/js/selectors/indexSelector.js"></script>
+<script src="assets/js/selectors/typeOfChartSelector.js"></script>
+<script src="assets/js/selectors/durationSelector.js"></script>
 
 <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
