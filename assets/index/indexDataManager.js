@@ -1,7 +1,7 @@
 var indexData = {}
 
 var raw_indexData = {
-    "Nifty 50 TRI": {data: index_raw_Nifty_50_TRI, dateAttribute: "HistoricalDate", navAttribute: "CLOSE"},
+    "Nifty 50 TRI": {data: index_raw_Nifty_50_TRI, dateAttribute: "Date", navAttribute: "TotalReturnsIndex"},
     "Nifty Next 50 TRI": {data: index_raw_Nifty_Next_50_TRI, dateAttribute: "Date", navAttribute: "TotalReturnsIndex"},
     "Nifty Midcap 150 TRI": {data: index_raw_Nifty_Midcap_150_TRI, dateAttribute: "Date", navAttribute: "TotalReturnsIndex"},
     "Nifty SmallCap 250 TRI": {data: index_raw_Nifty_SmallCap_250_TRI, dateAttribute: "Date", navAttribute: "TotalReturnsIndex"},
