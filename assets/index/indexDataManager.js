@@ -1,26 +1,69 @@
 var indexData = {}
+var indexNames = {};
 
-var raw_indexData = {
-    "Nifty 50 TRI": {data: index_raw_Nifty_50_TRI, dateAttribute: "Date", navAttribute: "TotalReturnsIndex"},
-    "Nifty Next 50 TRI": {data: index_raw_Nifty_Next_50_TRI, dateAttribute: "Date", navAttribute: "TotalReturnsIndex"},
-    "Nifty Midcap 150 TRI": {data: index_raw_Nifty_Midcap_150_TRI, dateAttribute: "Date", navAttribute: "TotalReturnsIndex"},
-    "Nifty SmallCap 250 TRI": {data: index_raw_Nifty_SmallCap_250_TRI, dateAttribute: "Date", navAttribute: "TotalReturnsIndex"},
-    "Nifty 500 TRI": {data: index_raw_Nifty_500_TRI, dateAttribute: "Date", navAttribute: "TotalReturnsIndex"},
-    "Nifty LargeMidcap 250 TRI": {data: index_raw_Nifty_LargeMidcap_250_TRI, dateAttribute: "Date", navAttribute: "TotalReturnsIndex"},
+const getIndexData = (indexName) => {
+    return (async () => {
+        if (indexData[indexName]) {
+            // console.log("cache hit for index: ", indexName)
+            return indexData[indexName];
+        } else {
+            // console.log("cache miss for index: ", indexName)
+            try {
+                const data = await fetchIndexData(indexName);
+                const navData = JSON.parse(data.d)
+                    .map(item => ({
+                        date: new Date(item["Date"]),
+                        nav: item["TotalReturnsIndex"]
+                    }));
+
+                indexData[indexName] = navData;
+                return navData;
+            } catch (error) {
+                throw error;
+            }
+        }
+    })();
+};
+
+async function getIndexNames() {
+    const listOfIndexNames = await fetchListOfIndexNames();
+
+    for (const index of listOfIndexNames.d) {
+        indexNames[index.indextype] = {};
+    }
+
+    const correctedIndexNameToActualName = {};
+
+    for (const indexName in indexNames) {
+        const correctedIndexName = correctIndexName(indexName);
+        correctedIndexNameToActualName[correctedIndexName] = indexName;
+    }
+
+    const sortedIndexNames = Object.keys(correctedIndexNameToActualName).sort();
+
+    console.log("available indices : ", sortedIndexNames);
+
+    for (const indexName in sortedIndexNames) {
+        var option = document.createElement("option");
+        option.value = correctedIndexNameToActualName[sortedIndexNames[indexName]];
+        option.text = sortedIndexNames[indexName];
+        indexRadio.appendChild(option);
+    }
 }
 
-for (const key in raw_indexData) {
-    if (Object.prototype.hasOwnProperty.call(raw_indexData, key)) {
-        const data = raw_indexData[key].data;
+getIndexNames();
 
-        navData = JSON.parse(data.d)
-            .map(item => ({
-                date: new Date(item[raw_indexData[key].dateAttribute]),
-                nav: item[raw_indexData[key].navAttribute]
-            }));
+async function fetchIndexData(name) {
+    const response = await fetch("https://raw.githubusercontent.com/asrajavel/mf-index-data/main/index%20data/" + name + ".json");
+    return await response.json();
+}
 
-        indexData[key] = navData;
+async function fetchListOfIndexNames(name) {
+    const response = await fetch("https://raw.githubusercontent.com/asrajavel/mf-index-data/main/index%20list.json");
+    return await response.json();
+}
 
-        console.log(`Key: ${key}, Value: ${data}`);
-    }
+function correctIndexName(indexName) {
+    // Add a space before each group of digits
+    return indexName.replace(/(\d+)/g, ' $1').replace(/\s+/g, ' ');
 }

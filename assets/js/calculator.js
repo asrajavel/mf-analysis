@@ -110,12 +110,12 @@ function preComputeForSingleDuration(schemeName, navData, years) {
         if(sipXirr === undefined) {
             sipXirr = calcSipXirr(years, sipSellingPrice)
             sipXirrCache[years][sipSellingPrice] = sipXirr
-            console.log("running on demand sip xirr for extreme value, years: ", years, " price: ", sipSellingPrice, " date: ", currentDate, "xirr: ", sipXirr)
+            // console.log("running on demand sip xirr for extreme value, years: ", years, " price: ", sipSellingPrice, " date: ", currentDate, "xirr: ", sipXirr)
         }
         if(lumpsumXirr === undefined) {
             lumpsumXirr = calcLumpsumXirr(years, lumpsumSellingPrice)
             lumpsumXirrCache[years][lumpsumSellingPrice] = lumpsumXirr
-            console.log("running on demand lumpsum xirr for extreme value, years: ", years, " price: ", lumpsumSellingPrice, " date: ", currentDate, "xirr: ", lumpsumXirr)
+            // console.log("running on demand lumpsum xirr for extreme value, years: ", years, " price: ", lumpsumSellingPrice, " date: ", currentDate, "xirr: ", lumpsumXirr)
         }
 
         // xirr = XIRR(amounts, invDates) * 100
