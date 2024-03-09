@@ -1,12 +1,5 @@
 indexRadio = document.getElementById("indexRadio");
 
-for (var indexName in raw_indexData) {
-    var option = document.createElement("option");
-    option.value = indexName;
-    option.text = indexName;
-    indexRadio.appendChild(option);
-}
-
 indexRadio.addEventListener("change", function () {
     var selectedValue = indexRadio.value;
     if (selectedValue !== "Select an Index") {

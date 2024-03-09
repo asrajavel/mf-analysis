@@ -12,7 +12,7 @@ async function main() {
 
         try {
             if (schemeCode === "index") {
-                navData = await indexData[schemeName];
+                navData = await getIndexData(schemeName);
             } else {
                 navData = await fetchData(schemeCode);
             }

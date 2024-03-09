@@ -78,12 +78,9 @@
         <br> <h4>Index</h4>
         Currently there are no sources in India which provides historical index data through API.
         <br> I manually download from <a href="https://www.niftyindices.com/reports/historical-data">https://www.niftyindices.com/reports/historical-data</a>
-        and upload into the site.
-        <br> So, this data is stored in the site itself, which has to be manually updated for new dates' data to be
-        available.
+        using a python script and upload into <a href="https://github.com/asrajavel/mf-index-data/tree/main/index%20data">another repo</a>.
         <br> Will try to update this every few months.
-        <br> The data size is 3MB, which is loaded to the page itself.
-        <br> Everytime you open/refresh the site this 3MB is loaded again.
+        <br> In case you need newer data for indices, consider using some index funds for comparison(keep in mind tracking errors).
         <br>
         <br> <h4>Mutual funds</h4>
         Every time you choose a fund, live data is fetched from <a href="https://mfapi.in/">mfapi.in</a>
@@ -95,8 +92,8 @@
         <br> There are no backend servers to this site, nothing leaves your browser.
         <br> Once you select a mutual fund or index, XIRR is calculated for all the supported investment durations
         (currently 1, 3, 5, 10 years), for both lumpsum and SIP investments.
-        <br> (Nifty 50 index data is available from 1991, for all durations with Lumpsum and SIP rolling XIRR calcs -> a
-        total of around 80,000 XIRR values need to be calculated)
+        <br> (Nifty 50 index data is available from 1999, for all durations with Lumpsum and SIP rolling XIRR calcs -> a
+        total of around 60,000 XIRR values need to be calculated)
         <br> Given the nav data - this takes around 2 mins for one fund/index, as the xirr calculations are time taking.
         <br> Which is too much to wait for a graph to load, also the browser will freeze as all the calculations will be
         done on your device.
