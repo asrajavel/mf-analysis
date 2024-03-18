@@ -18,6 +18,7 @@ function preComputeForSingleDuration(schemeName, navData, years) {
     cacheKeyForSipAbsolute = JSON.stringify({ schemeName, years, type: "Sip Absolute Value" });
     cacheKeyForLumpsumXirr = JSON.stringify({ schemeName, years, type: "Lumpsum Rolling Returns" });
     cacheKeyForLumpsumAbsolute = JSON.stringify({ schemeName, years, type: "Lumpsum Absolute Value" });
+    cacheKeyForStandardDeviation = JSON.stringify({ schemeName, years, type: "Standard Deviation" });
 
     // if already computed once do not compute again
     if (mfGraphCache[cacheKeyForSipXirr]) return;
@@ -81,6 +82,7 @@ function preComputeForSingleDuration(schemeName, navData, years) {
     sipAbsoluteData = []
     lumpsumXirrData = []
     lumpsumAbsoluteData = []
+    standardDeviationData = []
 
     for (i = fullNavData.length - 1; i >= 0; i--) {
         currentDate = fullNavData[i].date
@@ -97,6 +99,14 @@ function preComputeForSingleDuration(schemeName, navData, years) {
             amount = 100;
             totalUnitsPurchasedBySip += amount / dateToNavDictionary[invDate]
         }
+
+        allNavsForSDCalculation = []
+        for (j = months; j >= 0; j--) {
+            allNavsForSDCalculation.push(dateToNavDictionary[getnthPreviousMonthDate(currentDate, j)])
+        }
+
+        let standardDeviation = calculateStandardDeviation(allNavsForSDCalculation)
+        standardDeviationData.push([currentDate.getTime(), Math.round(standardDeviation * 100) / 100])
 
         let sipSellingPriceUnrounded = totalUnitsPurchasedBySip * dateToNavDictionary[currentDate]
         let lumpsumSellingPriceUnrounded = totalUnitsPurchasedByLumpSum * dateToNavDictionary[currentDate]
@@ -137,4 +147,32 @@ function preComputeForSingleDuration(schemeName, navData, years) {
 
     mfGraphCache[cacheKeyForLumpsumXirr] = lumpsumXirrData;
     mfGraphCache[cacheKeyForLumpsumAbsolute] = lumpsumAbsoluteData;
+
+    mfGraphCache[cacheKeyForStandardDeviation] = standardDeviationData;
+}
+
+function calculateStandardDeviation(allNavs) {
+    returns = []
+    const n = allNavs.length
+    for (let i = 0; i < n-1; i++) {
+        returns.push((allNavs[i+1] - allNavs[i]) * 100 / allNavs[i])
+    }
+    let standardDeviation = getStandardDeviation(returns);
+    return standardDeviation;
+}
+
+function getStandardDeviation(arr) {
+    // Step 1: Calculate the mean (average) of the array
+    const mean = arr.reduce((acc, val) => acc + val, 0) / arr.length;
+
+    // Step 2: Calculate the squared differences from the mean
+    const squaredDifferences = arr.map(val => Math.pow(val - mean, 2));
+
+    // Step 3: Calculate the mean of the squared differences
+    const squaredDifferencesMean = squaredDifferences.reduce((acc, val) => acc + val, 0) / squaredDifferences.length;
+
+    // Step 4: Calculate the square root of the mean of the squared differences
+    const standardDeviation = Math.sqrt(squaredDifferencesMean);
+
+    return standardDeviation;
 }

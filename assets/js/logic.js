@@ -42,6 +42,12 @@ async function main() {
                 })
                 refLineValue = lumpsumAmount
                 graphType = "currency"
+            } else if (standardDeviationButton.checked) {
+                dataSeriesForGraph = getSipRolling(schemeName, navData, years, "Standard Deviation");
+                refLineValue = 0
+                graphType = "percentage"
+            } else {
+                console.log("unknown graphType")
             }
 
             dataToPlot.push({
