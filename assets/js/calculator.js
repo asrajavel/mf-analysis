@@ -15,13 +15,10 @@ function getSipRolling(schemeName, data, years, type) {
 function calculateMontlyReturns(getnthPreviousMonthDate, dateToNavDictionary) {
     monthlyReturns = []
 
-    for (i = fullNavData.length - 1; i >= 0; i--) {
-        currentDate = fullNavData[i].date
-        firstDateForInvestment = getnthPreviousMonthDate(currentDate, 1);
-        // console.log("firstDateForSip: ", firstDateForSip)
-        if (firstDateForInvestment < navStartingDate) break;
-
-        monthlyReturn = (dateToNavDictionary[currentDate] - dateToNavDictionary[firstDateForInvestment]) * 100 / dateToNavDictionary[firstDateForInvestment]
+    for (i = fullNavData.length - 1; i >= 1; i--) {
+        let currnetDaynNav = parseFloat(fullNavData[i].nav);
+        let previousDayNav = parseFloat(fullNavData[i-1].nav);
+        monthlyReturn = (currnetDaynNav - previousDayNav) * 100 / previousDayNav
         monthlyReturns.unshift(monthlyReturn);
     }
     return monthlyReturns;
@@ -99,6 +96,7 @@ function preComputeForSingleDuration(schemeName, navData, years) {
     lumpsumAbsoluteData = []
     standardDeviationData = []
     const monthlyReturns = calculateMontlyReturns(getnthPreviousMonthDate, dateToNavDictionary);
+    console.log("monthlyReturns: ", monthlyReturns)
 
     for (i = fullNavData.length - 1; i >= 0; i--) {
         currentDate = fullNavData[i].date
