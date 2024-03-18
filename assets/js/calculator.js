@@ -12,6 +12,21 @@ function getSipRolling(schemeName, data, years, type) {
     if (mfGraphCache[cacheKey]) return mfGraphCache[cacheKey];
 }
 
+function calculateMontlyReturns(getnthPreviousMonthDate, dateToNavDictionary) {
+    monthlyReturns = []
+
+    for (i = fullNavData.length - 1; i >= 0; i--) {
+        currentDate = fullNavData[i].date
+        firstDateForInvestment = getnthPreviousMonthDate(currentDate, 1);
+        // console.log("firstDateForSip: ", firstDateForSip)
+        if (firstDateForInvestment < navStartingDate) break;
+
+        monthlyReturn = (dateToNavDictionary[currentDate] - dateToNavDictionary[firstDateForInvestment]) * 100 / dateToNavDictionary[firstDateForInvestment]
+        monthlyReturns.unshift(monthlyReturn);
+    }
+    return monthlyReturns;
+}
+
 //data format: [{date: "31-12-2023", nav: 20.3}]
 function preComputeForSingleDuration(schemeName, navData, years) {
     cacheKeyForSipXirr = JSON.stringify({ schemeName, years, type: "Sip Rolling Returns" });
@@ -83,6 +98,7 @@ function preComputeForSingleDuration(schemeName, navData, years) {
     lumpsumXirrData = []
     lumpsumAbsoluteData = []
     standardDeviationData = []
+    const monthlyReturns = calculateMontlyReturns(getnthPreviousMonthDate, dateToNavDictionary);
 
     for (i = fullNavData.length - 1; i >= 0; i--) {
         currentDate = fullNavData[i].date
@@ -101,11 +117,17 @@ function preComputeForSingleDuration(schemeName, navData, years) {
         }
 
         allNavsForSDCalculation = []
-        for (j = months; j >= 0; j--) {
-            allNavsForSDCalculation.push(dateToNavDictionary[getnthPreviousMonthDate(currentDate, j)])
+        for (j = i; j >= 0; j--) {
+            if (fullNavData[j].date < firstDateForInvestment) {
+                // console.log("breaking at j: ", j, " date: ", fullNavData[j].date, " firstDateForInvestment: ", firstDateForInvestment)
+                break;
+            }
+            allNavsForSDCalculation.push(monthlyReturns[j])
         }
 
-        let standardDeviation = calculateStandardDeviation(allNavsForSDCalculation)
+        // console.log("allNavsForSDCalculation: ", allNavsForSDCalculation)
+
+        let standardDeviation = getStandardDeviation(allNavsForSDCalculation)
         standardDeviationData.push([currentDate.getTime(), Math.round(standardDeviation * 100) / 100])
 
         let sipSellingPriceUnrounded = totalUnitsPurchasedBySip * dateToNavDictionary[currentDate]
