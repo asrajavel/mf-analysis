@@ -12,16 +12,16 @@ function getSipRolling(schemeName, data, years, type) {
     if (mfGraphCache[cacheKey]) return mfGraphCache[cacheKey];
 }
 
-function calculateMontlyReturns(getnthPreviousMonthDate, dateToNavDictionary) {
-    monthlyReturns = []
+function calculateDailyReturns() {
+    dailyReturns = []
 
     for (i = fullNavData.length - 1; i >= 1; i--) {
         let currnetDaynNav = parseFloat(fullNavData[i].nav);
         let previousDayNav = parseFloat(fullNavData[i-1].nav);
-        monthlyReturn = (currnetDaynNav - previousDayNav) * 100 / previousDayNav
-        monthlyReturns.unshift(monthlyReturn);
+        dailyReturn = (currnetDaynNav - previousDayNav) * 100 / previousDayNav
+        dailyReturns.unshift(dailyReturn);
     }
-    return monthlyReturns;
+    return dailyReturns;
 }
 
 //data format: [{date: "31-12-2023", nav: 20.3}]
@@ -95,8 +95,9 @@ function preComputeForSingleDuration(schemeName, navData, years) {
     lumpsumXirrData = []
     lumpsumAbsoluteData = []
     standardDeviationData = []
-    const monthlyReturns = calculateMontlyReturns(getnthPreviousMonthDate, dateToNavDictionary);
-    console.log("monthlyReturns: ", monthlyReturns)
+    const dailyReturns = calculateDailyReturns();
+    let standardDeviationValues = rollingStdDev(dailyReturns, 365*years);
+    let standardDeviationValuesIndex = standardDeviationValues.length - 1;
 
     for (i = fullNavData.length - 1; i >= 0; i--) {
         currentDate = fullNavData[i].date
@@ -114,19 +115,20 @@ function preComputeForSingleDuration(schemeName, navData, years) {
             totalUnitsPurchasedBySip += amount / dateToNavDictionary[invDate]
         }
 
-        allNavsForSDCalculation = []
-        for (j = i; j >= 0; j--) {
-            if (fullNavData[j].date < firstDateForInvestment) {
-                // console.log("breaking at j: ", j, " date: ", fullNavData[j].date, " firstDateForInvestment: ", firstDateForInvestment)
-                break;
-            }
-            allNavsForSDCalculation.push(monthlyReturns[j])
-        }
+        // allNavsForSDCalculation = []
+        // for (j = i; j >= 0; j--) {
+        //     if (fullNavData[j].date < firstDateForInvestment) {
+        //         // console.log("breaking at j: ", j, " date: ", fullNavData[j].date, " firstDateForInvestment: ", firstDateForInvestment)
+        //         break;
+        //     }
+        //     allNavsForSDCalculation.push(monthlyReturns[j])
+        // }
 
         // console.log("allNavsForSDCalculation: ", allNavsForSDCalculation)
 
-        let standardDeviation = getStandardDeviation(allNavsForSDCalculation)
-        standardDeviationData.push([currentDate.getTime(), Math.round(standardDeviation * 100) / 100])
+        // let standardDeviation = getStandardDeviation(allNavsForSDCalculation)
+        standardDeviationData.push([currentDate.getTime(), Math.round(standardDeviationValues[standardDeviationValuesIndex] * 100) / 100])
+        standardDeviationValuesIndex--;
 
         let sipSellingPriceUnrounded = totalUnitsPurchasedBySip * dateToNavDictionary[currentDate]
         let lumpsumSellingPriceUnrounded = totalUnitsPurchasedByLumpSum * dateToNavDictionary[currentDate]
@@ -196,3 +198,43 @@ function getStandardDeviation(arr) {
 
     return standardDeviation;
 }
+
+//Implemented from: https://stackoverflow.com/a/14638138
+function rollingStdDev(values, n) {
+    let rollingStdDevs = [];
+    let sum = 0;
+    let sumSq = 0;
+    let average = 0;
+    let variance = 0;
+
+    for (let i = 0; i < values.length; i++) {
+        let x = values[i];
+        sum += x;
+        sumSq += x * x;
+
+        if (i >= n) {
+            let x0 = values[i - n];
+            sum -= x0;
+            sumSq -= x0 * x0;
+
+            let newAvg = average + (x - x0) / n;
+            variance = variance + (x - newAvg + x0 - average) * (x - x0) / (n);
+            average = newAvg;
+        }
+        else if (i === n - 1) {
+            //this is done only the first time
+            average = sum / n;
+            variance = sumSq / n - average * average;
+        }
+
+        if (i >= n - 1) {
+            let StdDev = Math.sqrt(variance);
+            rollingStdDevs.push(StdDev);
+        }
+    }
+
+    return rollingStdDevs;
+}
+
+let navss = [100, 70, 100, 120, 130, 100, 115, 105, 140, 145, 130, 200, 200];
+console.log(rollingStdDev(navss, 3));
