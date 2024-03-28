@@ -2,6 +2,7 @@ const sipRollingReturnsButton = document.getElementById("radioButton1TypeOfChart
 const sipRollingAbsoluteButton = document.getElementById("radioButton2TypeOfChart");
 const lumpsumRollingReturnsButton = document.getElementById("radioButton3TypeOfChart");
 const lumpsumRollingAbsoluteButton = document.getElementById("radioButton4TypeOfChart");
+const standardDeviationButton = document.getElementById("radioButton5TypeOfChart");
 
 const sipAmountDiv = document.getElementById("sipAmountDiv");
 const lumpsumAmountDiv = document.getElementById("lumpsumAmountDiv");
@@ -35,6 +36,13 @@ lumpsumRollingAbsoluteButton.addEventListener("change", function () {
     if (lumpsumRollingAbsoluteButton.checked) {
         hideBothAmountDivs()
         lumpsumAmountDiv.style.display = "block";
+    }
+    main()
+})
+
+standardDeviationButton.addEventListener("change", function () {
+    if (standardDeviationButton.checked) {
+        hideBothAmountDivs()
     }
     main()
 })

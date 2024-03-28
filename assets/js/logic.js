@@ -5,6 +5,8 @@ async function main() {
     const years = getYearsFromRadioButton();
 
     const dataToPlot = [];
+    let sipAmount = null;
+    let lumpsumAmount = null;
 
     for (const childDiv of childDivs) {
         const schemeCode = childDiv.getAttribute("schemecode");
@@ -22,6 +24,7 @@ async function main() {
                 dataSeriesForGraph = getSipRolling(schemeName, navData, years, "Sip Rolling Returns");
                 refLineValue = 0
                 graphType = "percentage"
+                graphName = "Sip Rolling Returns (XIRR %)"
             } else if (sipRollingAbsoluteButton.checked) {
                 dataSeriesForGraph = getSipRolling(schemeName, navData, years, "Sip Absolute Value");
                 sipAmount = sipAmountTextBox.value.replace(/,/g, '');
@@ -30,10 +33,12 @@ async function main() {
                 })
                 refLineValue = sipAmount * 12 * years
                 graphType = "currency"
+                graphName = "Sip Rolling Absolute Value (₹)"
             } else if (lumpsumRollingReturnsButton.checked) {
                 dataSeriesForGraph = getSipRolling(schemeName, navData, years, "Lumpsum Rolling Returns");
                 refLineValue = 0
                 graphType = "percentage"
+                graphName = "Lumpsum Rolling Returns (CAGR %)"
             } else if(lumpsumRollingAbsoluteButton.checked) {
                 dataSeriesForGraph = getSipRolling(schemeName, navData, years, "Lumpsum Absolute Value");
                 lumpsumAmount = lumpsumAmountTextBox.value.replace(/,/g, '');
@@ -42,6 +47,14 @@ async function main() {
                 })
                 refLineValue = lumpsumAmount
                 graphType = "currency"
+                graphName = "Lumpsum Rolling Absolute Value (₹)"
+            } else if (standardDeviationButton.checked) {
+                dataSeriesForGraph = getSipRolling(schemeName, navData, years, "Standard Deviation");
+                refLineValue = 0
+                graphType = "percentage"
+                graphName = "Standard Deviation Rolling Annualized Monthly (Risk) (%)"
+            } else {
+                console.log("unknown graphType")
             }
 
             dataToPlot.push({
@@ -53,6 +66,6 @@ async function main() {
         }
     }
 
-    plotInChart(dataToPlot, graphType, refLineValue);
+    plotInChart(dataToPlot, graphType, refLineValue, years, graphName, sipAmount, lumpsumAmount);
 }
 

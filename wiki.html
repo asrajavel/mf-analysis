@@ -71,6 +71,13 @@
         You invested x amount on 10-Jan-2020.
         <br> x is what you input in the text box as the lumpsum amount.
         <br> p is the current value(₹) of your investment
+        <br>
+        <br> <h4>Standard Deviation Rolling Annualized Monthly (Risk) (%):</h4>
+        We take all the monthly returns for all the dates from 10-Jan-2020 to 10-Jan-2023.
+        <br> (Monthly return of 10-Jan-2023 is the return percentage of the same date compared to 10-Dec-2022)
+        <br> p is the standard deviation of these monthly returns, multiplied by sqrt(12) to make it annualized.(<a href="https://ycharts.com/glossary/terms/standard_deviation">Why?</a>)
+        <br> This is a measure of how much the returns fluctuated, which is a measure of risk.
+
     </section>
     <br>
     <section id="fundSelection" style="text-align: left">
@@ -80,7 +87,7 @@
         <br> I manually download from <a href="https://www.niftyindices.com/reports/historical-data">https://www.niftyindices.com/reports/historical-data</a>
         using a python script and upload into <a href="https://github.com/asrajavel/mf-index-data/tree/main/index%20data">another repo</a>.
         <br> Will try to update this every few months.
-        <br> In case you need newer data for indices, consider using some index funds for comparison(keep in mind tracking errors).
+        <br> In case you need newer data for indices, consider using the corresponding index funds(keep in mind tracking errors).
         <br>
         <br> <h4>Mutual funds</h4>
         Every time you choose a fund, live data is fetched from <a href="https://mfapi.in/">mfapi.in</a>
@@ -101,6 +108,9 @@
         your device, hence skipping the 2 mins.
         <br> The size of the precalculated values is around 3MB, which is loaded to the page itself.
         <br> Everytime you open/refresh the site this 3MB is loaded again.
+        <br>
+        <br> Calculating rolling standard deviation is also a CPU intensive time taking operation.
+        <br> So the variance is calculated in a rolling fashion, based on <a href="https://stackoverflow.com/questions/14635735/how-to-efficiently-calculate-a-moving-standard-deviation/14638138#14638138">this implementation</a>.
     </section>
     <br>
     <section id="fundSelection" style="text-align: left">

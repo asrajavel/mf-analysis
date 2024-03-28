@@ -12,12 +12,28 @@ function getSipRolling(schemeName, data, years, type) {
     if (mfGraphCache[cacheKey]) return mfGraphCache[cacheKey];
 }
 
+function calculateMonthlyReturns(getnthPreviousMonthDate, dateToNavDictionary) {
+    monthlyReturns = []
+
+    for (i = fullNavData.length - 1; i >= 0; i--) {
+        currentDate = fullNavData[i].date
+        firstDateForInvestment = getnthPreviousMonthDate(currentDate, 1);
+        // console.log("firstDateForSip: ", firstDateForSip)
+        if (firstDateForInvestment < navStartingDate) break;
+
+        monthlyReturn = (dateToNavDictionary[currentDate] - dateToNavDictionary[firstDateForInvestment]) * 100 / dateToNavDictionary[firstDateForInvestment]
+        monthlyReturns.unshift(monthlyReturn);
+    }
+    return monthlyReturns;
+}
+
 //data format: [{date: "31-12-2023", nav: 20.3}]
 function preComputeForSingleDuration(schemeName, navData, years) {
     cacheKeyForSipXirr = JSON.stringify({ schemeName, years, type: "Sip Rolling Returns" });
     cacheKeyForSipAbsolute = JSON.stringify({ schemeName, years, type: "Sip Absolute Value" });
     cacheKeyForLumpsumXirr = JSON.stringify({ schemeName, years, type: "Lumpsum Rolling Returns" });
     cacheKeyForLumpsumAbsolute = JSON.stringify({ schemeName, years, type: "Lumpsum Absolute Value" });
+    cacheKeyForStandardDeviation = JSON.stringify({ schemeName, years, type: "Standard Deviation" });
 
     // if already computed once do not compute again
     if (mfGraphCache[cacheKeyForSipXirr]) return;
@@ -76,11 +92,16 @@ function preComputeForSingleDuration(schemeName, navData, years) {
 
     months = 12 * years;
     navStartingDate = fullNavData[0].date;
+    let squareRoot12 = Math.sqrt(12);
 
     sipXirrData = []
     sipAbsoluteData = []
     lumpsumXirrData = []
     lumpsumAbsoluteData = []
+    standardDeviationData = []
+    const monthlyReturns = calculateMonthlyReturns(getnthPreviousMonthDate, dateToNavDictionary);
+    let standardDeviationValues = rollingStdDev(monthlyReturns, 365*years)
+    let standardDeviationValuesIndex = standardDeviationValues.length - 1;
 
     for (i = fullNavData.length - 1; i >= 0; i--) {
         currentDate = fullNavData[i].date
@@ -97,6 +118,9 @@ function preComputeForSingleDuration(schemeName, navData, years) {
             amount = 100;
             totalUnitsPurchasedBySip += amount / dateToNavDictionary[invDate]
         }
+
+        standardDeviationData.push([currentDate.getTime(), Math.round(standardDeviationValues[standardDeviationValuesIndex] * squareRoot12 * 100) / 100])
+        standardDeviationValuesIndex--;
 
         let sipSellingPriceUnrounded = totalUnitsPurchasedBySip * dateToNavDictionary[currentDate]
         let lumpsumSellingPriceUnrounded = totalUnitsPurchasedByLumpSum * dateToNavDictionary[currentDate]
@@ -137,4 +161,45 @@ function preComputeForSingleDuration(schemeName, navData, years) {
 
     mfGraphCache[cacheKeyForLumpsumXirr] = lumpsumXirrData;
     mfGraphCache[cacheKeyForLumpsumAbsolute] = lumpsumAbsoluteData;
+
+    mfGraphCache[cacheKeyForStandardDeviation] = standardDeviationData;
+}
+
+//Implemented from: https://stackoverflow.com/a/14638138
+// In one shot we will get all the rolling standard deviations for the rolling duration of n
+// we don't calc for every rolling period like we are doing above for rolling returns
+function rollingStdDev(values, n) {
+    let rollingStdDevs = [];
+    let sum = 0;
+    let sumSq = 0;
+    let average = 0;
+    let variance = 0;
+
+    for (let i = 0; i < values.length; i++) {
+        let x = values[i];
+        sum += x;
+        sumSq += x * x;
+
+        if (i >= n) {
+            let x0 = values[i - n];
+            sum -= x0;
+            sumSq -= x0 * x0;
+
+            let newAvg = average + (x - x0) / n;
+            variance = variance + (x - newAvg + x0 - average) * (x - x0) / (n);
+            average = newAvg;
+        }
+        else if (i === n - 1) {
+            //this is done only the first time
+            average = sum / n;
+            variance = sumSq / n - average * average;
+        }
+
+        if (i >= n - 1) {
+            let StdDev = Math.sqrt(variance);
+            rollingStdDevs.push(StdDev);
+        }
+    }
+
+    return rollingStdDevs;
 }
