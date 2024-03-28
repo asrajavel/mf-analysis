@@ -12,16 +12,19 @@ function getSipRolling(schemeName, data, years, type) {
     if (mfGraphCache[cacheKey]) return mfGraphCache[cacheKey];
 }
 
-function calculateDailyReturns() {
-    dailyReturns = []
+function calculateMonthlyReturns(getnthPreviousMonthDate, dateToNavDictionary) {
+    monthlyReturns = []
 
-    for (i = fullNavData.length - 1; i >= 1; i--) {
-        let currnetDaynNav = parseFloat(fullNavData[i].nav);
-        let previousDayNav = parseFloat(fullNavData[i-1].nav);
-        dailyReturn = (currnetDaynNav - previousDayNav) * 100 / previousDayNav
-        dailyReturns.unshift(dailyReturn);
+    for (i = fullNavData.length - 1; i >= 0; i--) {
+        currentDate = fullNavData[i].date
+        firstDateForInvestment = getnthPreviousMonthDate(currentDate, 1);
+        // console.log("firstDateForSip: ", firstDateForSip)
+        if (firstDateForInvestment < navStartingDate) break;
+
+        monthlyReturn = (dateToNavDictionary[currentDate] - dateToNavDictionary[firstDateForInvestment]) * 100 / dateToNavDictionary[firstDateForInvestment]
+        monthlyReturns.unshift(monthlyReturn);
     }
-    return dailyReturns;
+    return monthlyReturns;
 }
 
 //data format: [{date: "31-12-2023", nav: 20.3}]
@@ -89,14 +92,15 @@ function preComputeForSingleDuration(schemeName, navData, years) {
 
     months = 12 * years;
     navStartingDate = fullNavData[0].date;
+    let squareRoot12 = Math.sqrt(12);
 
     sipXirrData = []
     sipAbsoluteData = []
     lumpsumXirrData = []
     lumpsumAbsoluteData = []
     standardDeviationData = []
-    const dailyReturns = calculateDailyReturns();
-    let standardDeviationValues = rollingStdDev(dailyReturns, 365*years);
+    const monthlyReturns = calculateMonthlyReturns(getnthPreviousMonthDate, dateToNavDictionary);
+    let standardDeviationValues = rollingStdDev(monthlyReturns, 365*years)
     let standardDeviationValuesIndex = standardDeviationValues.length - 1;
 
     for (i = fullNavData.length - 1; i >= 0; i--) {
@@ -115,19 +119,7 @@ function preComputeForSingleDuration(schemeName, navData, years) {
             totalUnitsPurchasedBySip += amount / dateToNavDictionary[invDate]
         }
 
-        // allNavsForSDCalculation = []
-        // for (j = i; j >= 0; j--) {
-        //     if (fullNavData[j].date < firstDateForInvestment) {
-        //         // console.log("breaking at j: ", j, " date: ", fullNavData[j].date, " firstDateForInvestment: ", firstDateForInvestment)
-        //         break;
-        //     }
-        //     allNavsForSDCalculation.push(monthlyReturns[j])
-        // }
-
-        // console.log("allNavsForSDCalculation: ", allNavsForSDCalculation)
-
-        // let standardDeviation = getStandardDeviation(allNavsForSDCalculation)
-        standardDeviationData.push([currentDate.getTime(), Math.round(standardDeviationValues[standardDeviationValuesIndex] * 100) / 100])
+        standardDeviationData.push([currentDate.getTime(), Math.round(standardDeviationValues[standardDeviationValuesIndex] * squareRoot12 * 100) / 100])
         standardDeviationValuesIndex--;
 
         let sipSellingPriceUnrounded = totalUnitsPurchasedBySip * dateToNavDictionary[currentDate]
@@ -173,33 +165,9 @@ function preComputeForSingleDuration(schemeName, navData, years) {
     mfGraphCache[cacheKeyForStandardDeviation] = standardDeviationData;
 }
 
-function calculateStandardDeviation(allNavs) {
-    returns = []
-    const n = allNavs.length
-    for (let i = 0; i < n-1; i++) {
-        returns.push((allNavs[i+1] - allNavs[i]) * 100 / allNavs[i])
-    }
-    let standardDeviation = getStandardDeviation(returns);
-    return standardDeviation;
-}
-
-function getStandardDeviation(arr) {
-    // Step 1: Calculate the mean (average) of the array
-    const mean = arr.reduce((acc, val) => acc + val, 0) / arr.length;
-
-    // Step 2: Calculate the squared differences from the mean
-    const squaredDifferences = arr.map(val => Math.pow(val - mean, 2));
-
-    // Step 3: Calculate the mean of the squared differences
-    const squaredDifferencesMean = squaredDifferences.reduce((acc, val) => acc + val, 0) / squaredDifferences.length;
-
-    // Step 4: Calculate the square root of the mean of the squared differences
-    const standardDeviation = Math.sqrt(squaredDifferencesMean);
-
-    return standardDeviation;
-}
-
 //Implemented from: https://stackoverflow.com/a/14638138
+// In one shot we will get all the rolling standard deviations for the rolling duration of n
+// we don't calc for every rolling period like we are doing above for rolling returns
 function rollingStdDev(values, n) {
     let rollingStdDevs = [];
     let sum = 0;
