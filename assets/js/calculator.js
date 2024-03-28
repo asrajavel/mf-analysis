@@ -203,6 +203,3 @@ function rollingStdDev(values, n) {
 
     return rollingStdDevs;
 }
-
-let navss = [100, 70, 100, 120, 130, 100, 115, 105, 140, 145, 130, 200, 200];
-console.log(rollingStdDev(navss, 3));
