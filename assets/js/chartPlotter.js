@@ -167,7 +167,7 @@ function getExportingOptions() {
                 text: 'Share', // Add this line
                 menuItems: [
                     {
-                        text: 'Copy to Clipboard',
+                        text: 'Copy to Clipboard (chrome only)',
                         onclick: function () {
                             var svg = unescape(encodeURIComponent(this.getSVG()));
                             var canvas = document.createElement('canvas');
