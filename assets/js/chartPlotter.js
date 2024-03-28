@@ -101,14 +101,14 @@ function getTooltipFormatter(graphType) {
         return {
             pointFormatter: function () {
                 let formattedValue = "₹ " + this.y.toLocaleString('en-IN', {minimumFractionDigits: 0, maximumFractionDigits: 0});
-                return `<span style="color:${this.color}">\u25CF</span> ${this.series.name}: <b>${formattedValue}</b> - `;
+                return `<span style="color:${this.color}">\u25CF</span> ${this.series.name}: <b>${formattedValue}</b>`;
             }
         };
     } else if (graphType === "percentage") {
         return {
             pointFormatter: function () {
                 let formattedValue = this.y.toFixed(2) + " %";
-                return `<span style="color:${this.color}">\u25CF</span> ${this.series.name}: <b>${formattedValue}</b> - `;
+                return `<span style="color:${this.color}">\u25CF</span> ${this.series.name}: <b>${formattedValue}</b>`;
             }
         };
     } else {
@@ -164,6 +164,7 @@ function getExportingOptions() {
         enabled: true,
         buttons: {
             contextButton: {
+                text: 'Share', // Add this line
                 menuItems: [
                     {
                         text: 'Copy to Clipboard',
@@ -174,10 +175,10 @@ function getExportingOptions() {
                             var img = new Image();
                             img.onload = function () {
                                 // Set canvas dimensions to match image dimensions
-                                canvas.width = img.width;
-                                canvas.height = img.height;
+                                canvas.width = 1200;
+                                canvas.height = 800;
                                 // Draw the image onto the canvas
-                                ctx.drawImage(img, 0, 0, img.width, img.height);
+                                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
                                 canvas.toBlob(function (blob) {
                                     navigator.clipboard.write([new ClipboardItem({'image/png': blob})]).then(function() {
                                         // Show toast notification when the image is successfully written to the clipboard
