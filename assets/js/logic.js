@@ -52,7 +52,7 @@ async function main() {
                 dataSeriesForGraph = getSipRolling(schemeName, navData, years, "Standard Deviation");
                 refLineValue = 0
                 graphType = "percentage"
-                graphName = "Standard Deviation (%)"
+                graphName = "Standard Deviation Rolling Annualized Monthly (Risk) (%)"
             } else {
                 console.log("unknown graphType")
             }
