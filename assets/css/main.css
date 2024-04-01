@@ -1670,6 +1670,64 @@ body.is-loading #header.alt .inner {
 		display: none;
 	}
 
+}/* Fund Selection */
+
+#fundSelection {
+	padding: 1em 1em 1em 1em;
+	background-color: #ffffff;
+	border-radius: 4px;
+	text-align: center;
+	margin: 0em 0em 1em 0em;
+}
+
+@media screen and (max-width: 736px) {
+
+	#fundSelection {
+		padding: 1em 1em 1em 1em;
+	}
+
+}
+
+@media screen and (max-width: 480px) {
+
+	#fundSelection {
+		padding: 1em 1em 1em 1em;
+	}
+
+	#intro p br {
+		display: none;
+	}
+
+}
+
+/* Fund Selection */
+
+#invDurationDiv {
+	padding: 1em 1em 1em 1em;
+	background-color: #ffffff;
+	border-radius: 4px;
+	text-align: center;
+	margin: 0em 0em 1em 0em;
+}
+
+@media screen and (max-width: 736px) {
+
+	#invDurationDiv {
+		padding: 1em 1em 1em 1em;
+	}
+
+}
+
+@media screen and (max-width: 480px) {
+
+	#invDurationDiv {
+		padding: 1em 1em 1em 1em;
+	}
+
+	#intro p br {
+		display: none;
+	}
+
 }
 
 /* CTA */

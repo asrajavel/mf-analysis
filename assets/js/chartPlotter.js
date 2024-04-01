@@ -62,6 +62,8 @@ function getRefLine(graphType, refLineValue) {
                 align: 'left'
             }
         }];
+    } else if(graphType === "NAV") {
+        return [];
     } else {
         console.log("unknown graph type")
     }
@@ -89,6 +91,8 @@ function getYaxisLabels(graphType) {
                 return currencyFormat(value);
             } else if (graphType === "percentage") {
                 return value + ' %';
+            } else if (graphType === "NAV") {
+                return this.value.toLocaleString('en-IN', {minimumFractionDigits: 0, maximumFractionDigits: 0})
             } else {
                 console.log("unknown graphType")
             }
@@ -111,6 +115,13 @@ function getTooltipFormatter(graphType) {
                 return `<span style="color:${this.color}">\u25CF</span> ${this.series.name}: <b>${formattedValue}</b>`;
             }
         };
+    } else if (graphType === "NAV") {
+        return {
+            pointFormatter: function () {
+                let formattedValue = this.y.toLocaleString('en-IN', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+                return `<span style="color:${this.color}">\u25CF</span> ${this.series.name}: <b>${formattedValue}</b>`;
+            }
+        };
     } else {
         console.log("unknown graphType")
     }
@@ -121,13 +132,17 @@ function plotInChart(dataToPlot, graphType, refLineValue, years, graphName, sipA
         chart.series[0].remove();
     }
 
-    let subtitleText = years + " years";
-    if (sipAmount !== null) {
-        subtitleText += " - SIP Amount: " + currencyFormat(sipAmount) + " per month"
-            + " - Total Inv: " + currencyFormat(sipAmount * 12 * years);
-    }
-    if (lumpsumAmount !== null) {
-        subtitleText += " - Lumpsum Amount: " + currencyFormat(lumpsumAmount);
+    if (years !== null) {
+        subtitleText = years + " years";
+        if (sipAmount !== null) {
+            subtitleText += " - SIP Amount: " + currencyFormat(sipAmount) + " per month"
+                + " - Total Inv: " + currencyFormat(sipAmount * 12 * years);
+        }
+        if (lumpsumAmount !== null) {
+            subtitleText += " - Lumpsum Amount: " + currencyFormat(lumpsumAmount);
+        }
+    } else {
+        subtitleText = "";
     }
 
     chart.setTitle({ text: graphName }, { text: subtitleText });

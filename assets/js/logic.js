@@ -2,7 +2,7 @@ async function main() {
     showLoading();
     const selectedMutualFundsDiv = document.getElementById("selectedMutualFunds");
     const childDivs = selectedMutualFundsDiv.querySelectorAll("div.row > div");
-    const years = getYearsFromRadioButton();
+    let years = getYearsFromRadioButton();
 
     const dataToPlot = [];
     let sipAmount = null;
@@ -53,7 +53,15 @@ async function main() {
                 refLineValue = 0
                 graphType = "percentage"
                 graphName = "Standard Deviation Rolling Annualized Monthly (Risk) (%)"
-            } else {
+            } else if (navButton.checked) {
+                dataSeriesForGraph = navData.map(item => {
+                    return [item.date.getTime(), parseFloat(item.nav)];
+                });
+                graphType = "NAV"
+                graphName = "NAV or Index Value"
+                years = null
+            }
+            else {
                 console.log("unknown graphType")
             }
 
