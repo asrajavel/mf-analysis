@@ -3,6 +3,9 @@ const sipRollingAbsoluteButton = document.getElementById("radioButton2TypeOfChar
 const lumpsumRollingReturnsButton = document.getElementById("radioButton3TypeOfChart");
 const lumpsumRollingAbsoluteButton = document.getElementById("radioButton4TypeOfChart");
 const standardDeviationButton = document.getElementById("radioButton5TypeOfChart");
+const navButton = document.getElementById("radioButton6TypeOfChart");
+
+const invDurationDiv = document.getElementById("invDurationDiv");
 
 const sipAmountDiv = document.getElementById("sipAmountDiv");
 const lumpsumAmountDiv = document.getElementById("lumpsumAmountDiv");
@@ -13,6 +16,7 @@ const lumpsumAmountDiv = document.getElementById("lumpsumAmountDiv");
 sipRollingReturnsButton.addEventListener("change", function () {
     if (sipRollingReturnsButton.checked) {
         hideBothAmountDivs()
+        showInvDurationDiv()
     }
     main()
 })
@@ -20,6 +24,7 @@ sipRollingReturnsButton.addEventListener("change", function () {
 lumpsumRollingReturnsButton.addEventListener("change", function () {
     if (lumpsumRollingReturnsButton.checked) {
         hideBothAmountDivs()
+        showInvDurationDiv()
     }
     main()
 })
@@ -28,6 +33,7 @@ sipRollingAbsoluteButton.addEventListener("change", function () {
     if (sipRollingAbsoluteButton.checked) {
         hideBothAmountDivs()
         sipAmountDiv.style.display = "block";
+        showInvDurationDiv()
     }
     main()
 })
@@ -36,6 +42,7 @@ lumpsumRollingAbsoluteButton.addEventListener("change", function () {
     if (lumpsumRollingAbsoluteButton.checked) {
         hideBothAmountDivs()
         lumpsumAmountDiv.style.display = "block";
+        showInvDurationDiv()
     }
     main()
 })
@@ -43,6 +50,15 @@ lumpsumRollingAbsoluteButton.addEventListener("change", function () {
 standardDeviationButton.addEventListener("change", function () {
     if (standardDeviationButton.checked) {
         hideBothAmountDivs()
+        showInvDurationDiv()
+    }
+    main()
+})
+
+navButton.addEventListener("change", function () {
+    if (navButton.checked) {
+        hideBothAmountDivs()
+        hideInvDurationDiv()
     }
     main()
 })
@@ -50,6 +66,14 @@ standardDeviationButton.addEventListener("change", function () {
 function hideBothAmountDivs() {
     sipAmountDiv.style.display = "none";
     lumpsumAmountDiv.style.display = "none";
+}
+
+function hideInvDurationDiv() {
+    invDurationDiv.style.display = "none";
+}
+
+function showInvDurationDiv() {
+    invDurationDiv.style.display = "block";
 }
 
 const sipAmountTextBox = document.getElementById("sipAmountTextBox")
