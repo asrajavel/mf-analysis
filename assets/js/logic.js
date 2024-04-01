@@ -57,6 +57,7 @@ async function main() {
                 dataSeriesForGraph = navData.map(item => {
                     return [item.date.getTime(), parseFloat(item.nav)];
                 });
+                refLineValue = null
                 graphType = "NAV"
                 graphName = "NAV or Index Value"
                 years = null
