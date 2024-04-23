@@ -4,7 +4,7 @@ This project is a Mutual Funds Analysis tool that provides various graphs repres
 
 ## Website
 
-Hosted at [https://asrajavel.github.io/mf-analysis/](https://asrajavel.github.io/mf-analysis/).
+Hosted at [https://asrajavel.github.io/mf-analysis/](https://asrajavel.github.io/mf-analysis/)
 
 ## Graphs
 
