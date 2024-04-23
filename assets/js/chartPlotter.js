@@ -127,7 +127,7 @@ function getTooltipFormatter(graphType) {
     }
 }
 
-function plotInChart(dataToPlot, graphType, refLineValue, years, graphName, sipAmount, lumpsumAmount) {
+function plotInChart(dataToPlot, graphType, refLineValue, years, graphName, sipAmount, lumpsumAmount, comparePercent) {
     while (chart.series.length > 0) {
         chart.series[0].remove();
     }
@@ -146,6 +146,26 @@ function plotInChart(dataToPlot, graphType, refLineValue, years, graphName, sipA
     }
 
     chart.setTitle({ text: graphName }, { text: subtitleText });
+
+    // Set compare to 'percent' if comparePercent is true
+    if (comparePercent) {
+        chart.update({
+            plotOptions: {
+                series: {
+                    compare: 'percent'
+                }
+            }
+        });
+    } else {
+        chart.update({
+            plotOptions: {
+                series: {
+                    compare: undefined
+                }
+            }
+        });
+    }
+
     var seriesData = dataToPlot.map(function (item) {
         item.sipRollingReturnsData.sort((a, b) => a[0] - b[0]);
         let series = {

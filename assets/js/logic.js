@@ -58,7 +58,7 @@ async function main() {
                     return [item.date.getTime(), parseFloat(item.nav)];
                 });
                 refLineValue = null
-                graphType = "NAV"
+                graphType = "percentage"
                 graphName = "NAV or Index Value"
                 years = null
             }
@@ -75,6 +75,6 @@ async function main() {
         }
     }
 
-    plotInChart(dataToPlot, graphType, refLineValue, years, graphName, sipAmount, lumpsumAmount);
+    plotInChart(dataToPlot, graphType, refLineValue, years, graphName, sipAmount, lumpsumAmount, true);
 }
 
